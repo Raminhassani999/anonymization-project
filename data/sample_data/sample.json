@@ -1,0 +1,23 @@
+[
+    {
+        "Name": "Mario Rossi",
+        "Birth Date": "15/03/1985",
+        "Phone": "3334567890",
+        "Address": "Via Roma 10",
+        "City": "Rome"
+    },
+    {
+        "Name": "Anna Bianchi",
+        "Birth Date": "22/07/1992",
+        "Phone": "3339876543",
+        "Address": "Via Milano 25",
+        "City": "Milan"
+    },
+    {
+        "Name": "Luca Ferrari",
+        "Birth Date": "01/12/1978",
+        "Phone": "3331234567",
+        "Address": "Via Torino 5",
+        "City": "Turin"
+    }
+]

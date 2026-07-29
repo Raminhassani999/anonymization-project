@@ -1,0 +1,5 @@
+Patient Mario Rossi was born on 15/03/1985.
+His phone number is 3334567890 and he lives at Via Roma 10 in Rome.
+
+Patient Anna Bianchi was born on 22/07/1992.
+Her phone number is 3339876543 and she lives at Via Milano 25 in Milan.
