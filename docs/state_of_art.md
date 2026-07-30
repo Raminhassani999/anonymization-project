@@ -172,5 +172,59 @@ Limitations:
 - Can produce incorrect predictions
 
 
+## Data Ingestion and Data Normalization
+
+Real-world anonymization systems usually receive data from different sources and file formats. Healthcare datasets, for example, can be stored in structured formats such as Excel, CSV, and JSON files, or in unstructured formats such as plain text documents.
+
+Before applying privacy-preserving techniques, the data must be correctly loaded and prepared. A data ingestion layer is responsible for reading information from different sources and converting it into a format that can be processed by the following stages of the pipeline.
+
+### Data Loaders
+
+Because different file formats have different internal structures, specific loading mechanisms are required for each type of source.
+
+Examples:
+
+- Excel files contain tables organized into rows and columns.
+- CSV files represent structured tabular data separated by delimiters.
+- JSON files store information using key-value structures.
+- TXT files contain unstructured textual information.
+
+A loader is responsible only for reading the data from its original format and returning the extracted information. Keeping separate loaders improves modularity and makes it easier to extend the system with new data sources.
+
+### Data Normalization
+
+After loading the data, different sources may produce different types of objects. For example, structured files can be represented as tabular data, while text files are represented as plain text.
+
+A normalization layer creates a common representation for all input sources. The goal is not to change the content of the data, but to provide a consistent structure that can be used by later components.
+
+A normalized representation can contain:
+
+- Source type: the original format of the data (Excel, CSV, JSON, TXT).
+- Data type: whether the information is structured or unstructured.
+- Content: the actual loaded data.
+
+This approach allows later stages, such as PII detection and anonymization, to operate independently from the original data format.
+
+### Automatic File Processing
+
+To improve scalability, a universal loading mechanism can automatically identify the input format and select the appropriate loader.
+
+The general workflow is:
+
+Different data sources
+↓
+Format-specific loader
+↓
+Normalized representation
+↓
+PII detection
+↓
+Anonymization
+
+This modular architecture improves maintainability because each component has a specific responsibility:
+- Loaders handle data extraction.
+- The normalization layer handles standardization.
+- Detection modules analyze sensitive information.
+- Anonymization modules apply privacy transformations.
 
 
