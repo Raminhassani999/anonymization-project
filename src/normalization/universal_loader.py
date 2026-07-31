@@ -1,9 +1,9 @@
 import os
-from csv_loader import load_csv
-from json_loader import load_json
-from txt_loader import load_txt
-from excel_loader import load_excel
-from common_format import create_common_format
+from .csv_loader import load_csv
+from .json_loader import load_json
+from .txt_loader import load_txt
+from .excel_loader import load_excel
+from .common_format import create_common_format
 
 def load_any_file(file_path):
     extension = os.path.splitext(file_path)[1].lower()
