@@ -10,3 +10,8 @@ if __name__ == "__main__":
 
     for item in pii_results:
         print(item)
+        
+    df = data["content"]
+    print(df.head())
+    print("\nColumns:")
+    print(df.columns.tolist())

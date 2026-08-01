@@ -1,26 +1,57 @@
 import pandas as pd
 import re
-from normalization.universal_loader import load_any_file
+
+PII_COLUMNS = {
+    "Patient Code": "patient_code",
+    "Tax Code": "tax_code",
+    "Birth Date": "date",
+    "Assessment Date": "date"
+}
+
+def detect_email(text):
+    return re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", text)
+
+def detect_date(text):
+    return re.findall(r"\b\d{2}/\d{2}/\d{4}\b" , text)
+
+def detect_phones(text):
+    return re.findall(r"(?:\+\d{1,3}\s?)?\d{9,10}" , text)
+
+def detect_patient_code(text):
+    return re.findall(r"\b[A-Z]\d{5}\b", text)
+
+def detect_tax_code(text):
+    return re.findall(r"\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b" , text)
+
+
 def detect_pii(text):
     results = {
-        "emails" : [],
-        "dates" : [],
-        "phones" : []
+        "emails" : detect_email(text),
+        "dates" : detect_date(text),
+        "phones" : detect_phones(text),
+        "patient_codes" : detect_patient_code(text),
+        "tax_code" : detect_tax_code(text)
     }
-    results["emails"] = re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}" , text)
-    results["dates"] = re.findall(r"\b\d{2}/\d{2}/\d{4}\b" , text)
-    results["phones"] = re.findall(r"(?:\+\d{1,3}\s?)?\d{9,10}", text)
+    
     return results
 
 def detect_dataframe(df):
     result = []
     for column in df.columns:
+        if column not in PII_COLUMNS:
+            continue
         for index, value in df[column].items():
             text = str(value)
-            matches = detect_pii(text)
+            matches = {}
+            if PII_COLUMNS[column] == "patient_code":
+                matches["patient_codes"] = detect_patient_code(text)
+            elif PII_COLUMNS[column] == "tax_code":
+                matches['tax_codes'] = detect_tax_code(text)
+            elif PII_COLUMNS[column] == "date":
+                matches["dates"] = detect_date(text)
             if any(matches.values()):
                 result.append({
-                    "row" : row,
+                    "row" : index,
                     "column" : column,
                     "value" : text,
                     "matches" : matches
@@ -34,6 +65,8 @@ if __name__ == "__main__":
     Email: mario.rossi@gmail.com
     Birth date: 15/03/1985
     Phone: +39 3331234567
+    Patient Code: F87421
+    Tax Code: RSSMRA85M01H501Z
     """
     
     result = detect_pii(text)
