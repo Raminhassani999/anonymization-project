@@ -1,46 +1,57 @@
 # Dataset Description
 
-## Dataset Name
+## Dataset
 
-Diabetology Synthetic Dataset
+The project currently uses a synthetic diabetology dataset provided in Excel (.xlsx) format.
 
-## Format
+Dataset file:
 
-Excel (.xlsx)
+```text
+data/diabetology/diabetology-synthetic-dataset.xlsx
+```
+
+## Dataset Characteristics
+
+* Format: Microsoft Excel (.xlsx)
+* Domain: Healthcare / Diabetology
+* Number of records: 1,337
+* Number of columns: 103
+
+## Data Content
+
+The dataset contains demographic, clinical, laboratory, and treatment information for synthetic patients.
+
+Examples of attributes include:
+
+* Patient Code
+* First Name
+* Surname
+* Birth Date
+* Tax Code
+* Assessment Date
+* Sex
+* Height
+* Weight
+* Blood Pressure
+* Laboratory values
+* Medication and treatment information
+
+## Personally Identifiable Information (PII)
+
+The current implementation focuses on detecting the following PII fields:
+
+* Patient Code
+* Tax Code (Italian Codice Fiscale)
+* Birth Date
+
+Future versions will extend detection to:
+
+* First Name
+* Surname
+* Email Address
+* Phone Number
+* Other entities detected using Named Entity Recognition (NER).
 
 ## Purpose
 
-Synthetic medical dataset used for testing anonymization approaches.
-
-## Structure
-
-Main sheet:
-- DM
-- 1337 rows
-- 103 columns
-
-Each row represents one patient visit.
-
-## Sensitive Information Types
-
-Direct identifiers:
-- First Name
-- Surname
-- Patient Code
-- Tax Code
-
-Potential quasi-identifiers:
-- Birth Date
-- Age
-- Sex
-- Assessment Date
-
-Sensitive medical information:
-- Diabetes diagnosis
-- Laboratory results
-- Treatments
-- Complications
-
-## Privacy
-
-The dataset is fully synthetic and contains no real personal data.
+The dataset is used to develop and evaluate rule-based and AI-based anonymization techniques while preserving the clinical information required for downstream analysis.
