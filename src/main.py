@@ -1,17 +1,14 @@
 from normalization.universal_loader import load_any_file
 from detection.regex_detector import detect_dataframe
+from anonymization.rule_based_anonymizer import anonymize_dataframe
 if __name__ == "__main__":
     file_path = "data/diabetology/diabetology-synthetic-dataset.xlsx"
 
     data = load_any_file(file_path)
     pii_results = detect_dataframe(data["content"])
-
-    print("Detected PII:")
-
-    for item in pii_results:
-        print(item)
-        
-    df = data["content"]
-    print(df.head())
-    print("\nColumns:")
-    print(df.columns.tolist())
+    anonymised_df = anonymize_dataframe(data["content"] , pii_results)
+    print(
+    anonymised_df[
+        ["Patient Code", "Birth Date", "Tax Code", "Assessment Date"]
+    ].head()
+)

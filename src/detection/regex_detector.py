@@ -12,7 +12,7 @@ def detect_email(text):
     return re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", text)
 
 def detect_date(text):
-    return re.findall(r"\b\d{2}/\d{2}/\d{4}\b" , text)
+    return re.findall(r"\b(\d{2}/\d{2}/\d{2}|\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})\b" , text)
 
 def detect_phones(text):
     return re.findall(r"(?:\+\d{1,3}\s?)?\d{9,10}" , text)
