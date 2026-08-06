@@ -6,7 +6,7 @@ if __name__ == "__main__":
 
     data = load_any_file(file_path)
     pii_results = detect_dataframe(data["content"])
-    anonymised_df = anonymize_dataframe(data["content"] , pii_results)
+    anonymised_df = anonymize_dataframe(data["content"] , pii_results , method = "mask")
     print(
     anonymised_df[
         ["Patient Code", "Birth Date", "Tax Code", "Assessment Date"]
