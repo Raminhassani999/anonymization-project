@@ -237,3 +237,38 @@ After completing the rule-based anonymization baseline, the project will continu
 * Transformer-based PII detection
 * Local Small Language Models (SLMs)
 * Performance comparison between rule-based and AI-based approaches
+
+
+## Progress Update (Today's Work)
+
+### Rule-Based Anonymization Improvements
+- Implemented a **generalization** anonymization strategy.
+- Added support for generalizing:
+  - Birth Date → Year of birth
+  - Assessment Date → Assessment year
+  - Age At Assessment → Age ranges (e.g., 70–79)
+
+### Policy-Based Anonymization
+- Refactored the anonymization engine to use a configurable anonymization policy.
+- Removed the global anonymization method parameter.
+- Introduced an `ANONYMIZATION_POLICY` dictionary that assigns a different anonymization strategy to each PII column.
+
+Current policy:
+- Patient Code → Pseudonymization
+- Tax Code → Masking
+- Birth Date → Generalization
+- Assessment Date → Generalization
+- Age At Assessment → Generalization
+
+### Refactoring
+- Simplified `main.py` by removing the anonymization method argument.
+- Updated `anonymize_dataframe()` to automatically select the anonymization strategy based on the configured policy.
+- Improved modularity and maintainability of the anonymization pipeline.
+
+### Testing
+- Successfully tested the complete anonymization workflow on the diabetology synthetic dataset.
+- Verified that:
+  - Patient codes are consistently pseudonymized.
+  - Tax codes are correctly masked.
+  - Dates are generalized to years.
+  - Ages are generalized into decade intervals.

@@ -55,3 +55,29 @@ Future versions will extend detection to:
 ## Purpose
 
 The dataset is used to develop and evaluate rule-based and AI-based anonymization techniques while preserving the clinical information required for downstream analysis.
+
+
+
+## Dataset Processing
+
+The diabetology synthetic dataset is currently used to develop and evaluate the rule-based anonymization pipeline.
+
+The following sensitive attributes are currently processed:
+
+- Patient Code
+- Tax Code
+- Birth Date
+- Assessment Date
+- Age At Assessment
+
+The implemented anonymization policy is:
+
+| Attribute | Technique |
+|-----------|-----------|
+| Patient Code | Pseudonymization |
+| Tax Code | Masking |
+| Birth Date | Generalization |
+| Assessment Date | Generalization |
+| Age At Assessment | Generalization |
+
+The anonymized dataset preserves analytical usefulness while reducing disclosure risk by applying different anonymization techniques according to the sensitivity of each attribute.

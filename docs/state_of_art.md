@@ -228,3 +228,21 @@ This modular architecture improves maintainability because each component has a 
 - Anonymization modules apply privacy transformations.
 
 
+## Rule-Based Anonymization
+
+Modern anonymization systems often combine multiple anonymization techniques instead of applying a single strategy to all sensitive information.
+
+Different data types require different privacy-preserving transformations. For example:
+
+- Direct identifiers are often pseudonymized to preserve relationships between records.
+- Highly sensitive identifiers may be masked or redacted.
+- Demographic information is commonly generalized to reduce re-identification risk while maintaining statistical utility.
+
+To reflect this approach, the implemented anonymization framework supports:
+
+- Redaction
+- Masking
+- Pseudonymization
+- Generalization
+
+Furthermore, the anonymization process is controlled through a configurable anonymization policy, allowing different anonymization strategies to be assigned to different PII attributes without modifying the anonymization logic.

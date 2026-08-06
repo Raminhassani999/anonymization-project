@@ -99,3 +99,33 @@ The following aspects will be compared:
 | Transformer Models    | Planned     |
 | Local SLM             | Planned     |
 | Performance Benchmark | Planned     |
+
+
+
+
+## Current Rule-Based Baseline
+
+The current baseline anonymization system consists of:
+
+### Detection
+- Regular-expression based PII detection
+- Column-aware detection for structured medical datasets
+
+### Supported PII Types
+- Patient Code
+- Tax Code
+- Birth Date
+- Assessment Date
+- Age At Assessment
+
+### Supported Anonymization Techniques
+- Redaction
+- Masking
+- Pseudonymization
+- Generalization
+
+### Configuration
+
+The anonymization engine uses a configurable policy that assigns a different anonymization strategy to each sensitive attribute.
+
+This implementation serves as the baseline system that will later be compared with AI-based Named Entity Recognition (NER) approaches.
