@@ -1,3 +1,13 @@
+ANONYMIZATION_POLICY = {
+    "Patient Code" : "pseudonym",
+    "Tax Code" : "mask",
+    "Birth Date" : "generalize",
+    "Assessment Date" : "generalize",
+    "Age At Assessment" : "generalize"
+    }
+
+
+
 patient_map = {}
 patient_counter = 1
 
@@ -60,18 +70,12 @@ def generalize_age(value):
     except:
         return value
 
-
-
-
-
-
-
-
-def anonymize_dataframe(df , detections , method="redact"):
+def anonymize_dataframe(df , detections):
     anonymised_df = df.copy().astype(str)
     for item in detections:
         row = item["row"]
         column = item["column"]
+        method = ANONYMIZATION_POLICY.get(column)
         
         if column == "Patient Code":
             if method == "redact":

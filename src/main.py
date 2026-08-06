@@ -7,11 +7,13 @@ if __name__ == "__main__":
     data = load_any_file(file_path)
     pii_results = detect_dataframe(data["content"])
     
-    anonymised_df = anonymize_dataframe(data["content"] , pii_results , method = "generalize")
+    anonymised_df = anonymize_dataframe(data["content"] , pii_results)
 
     print(
     anonymised_df[
         [
+            "Patient Code",
+            "Tax Code",
             "Birth Date",
             "Assessment Date",
             "Age At Assessment"
