@@ -1,3 +1,15 @@
+patient_map = {}
+patient_counter = 1
+
+def pseudonymize_patient_code(value):
+    global patient_counter
+    if value not in patient_map:
+        patient_map[value] = f"PATIENT_{patient_counter:04d}"
+        patient_counter += 1
+    return patient_map[value]
+
+
+
 def redact_patient_code(value):
     return "[PATIENT_CODE]"
 
@@ -37,7 +49,11 @@ def anonymize_dataframe(df , detections , method="redact"):
             elif method == "mask":
                         anonymised_df.at[row, column] = mask_patient_code(
                             anonymised_df.at[row, column]
-                    )    
+                    )
+            elif method == "pseudonym":
+                anonymised_df.at[row , column] = pseudonymize_patient_code(
+                    anonymised_df.at[row , column]
+                )  
                 
                 
                 
