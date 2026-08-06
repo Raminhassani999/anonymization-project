@@ -60,18 +60,3 @@ def detect_dataframe(df):
                     "matches" : matches
                     })
     return result
-
-if __name__ == "__main__":
-    
-    text = """
-    Patient: Mario Rossi
-    Email: mario.rossi@gmail.com
-    Birth date: 15/03/1985
-    Phone: +39 3331234567
-    Patient Code: F87421
-    Tax Code: RSSMRA85M01H501Z
-    """
-    
-    result = detect_pii(text)
-    
-    print(result)

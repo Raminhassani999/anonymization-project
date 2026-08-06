@@ -38,19 +38,3 @@ def load_any_file(file_path):
         )
     else:
         raise ValueError ("Unsupported type file")
-    
-    
-if __name__ == "__main__":
-    
-    file_path = "../../data/diabetology/diabetology-synthetic-dataset.xlsx"
-    
-    result = load_any_file(file_path)
-    
-    print("Source:")
-    print(result["source"])
-
-    print("\nType:")
-    print(result["type"])
-
-    print("\nPreview:")
-    print(result["content"].head())
