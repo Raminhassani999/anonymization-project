@@ -6,8 +6,6 @@ ANONYMIZATION_POLICY = {
     "Age At Assessment" : "generalize"
     }
 
-
-
 patient_map = {}
 patient_counter = 1
 
@@ -17,7 +15,6 @@ def pseudonymize_patient_code(value):
         patient_map[value] = f"PATIENT_{patient_counter:04d}"
         patient_counter += 1
     return patient_map[value]
-
 
 
 def redact_patient_code(value):
