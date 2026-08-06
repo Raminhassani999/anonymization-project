@@ -5,7 +5,8 @@ PII_COLUMNS = {
     "Patient Code": "patient_code",
     "Tax Code": "tax_code",
     "Birth Date": "date",
-    "Assessment Date": "date"
+    "Assessment Date": "date",
+    "Age At Assessment" : "age"
 }
 
 def detect_email(text):
@@ -49,6 +50,8 @@ def detect_dataframe(df):
                 matches['tax_codes'] = detect_tax_code(text)
             elif PII_COLUMNS[column] == "date":
                 matches["dates"] = detect_date(text)
+            elif PII_COLUMNS[column] == "age":
+                matches["age"] = [text]
             if any(matches.values()):
                 result.append({
                     "row" : index,

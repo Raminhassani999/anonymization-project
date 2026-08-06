@@ -35,9 +35,40 @@ def mask_date(value):
         return value[:4] + "-**-**"
     return value
 
+def generalize_date(value):
+    value = str(value)
+    
+    if "/" in value:
+        parts = value.split("/")
+        return parts[-1]
+
+    elif "-" in value:
+        parts = value.split("-")
+        return parts[0]
+
+    return value
+
+def generalize_age(value):
+    try:
+        age = float(value)
+
+        lower = int(age // 10) * 10
+        upper = int(lower + 9)
+
+        return f"{lower}-{upper}"
+
+    except:
+        return value
+
+
+
+
+
+
+
 
 def anonymize_dataframe(df , detections , method="redact"):
-    anonymised_df = df.copy()
+    anonymised_df = df.copy().astype(str)
     for item in detections:
         row = item["row"]
         column = item["column"]
@@ -65,15 +96,23 @@ def anonymize_dataframe(df , detections , method="redact"):
                 anonymised_df.at[row , column] = mask_tax_code(
                     anonymised_df.at[row , column]
                     )
-            
-            
-            
+        elif column == "Age At Assessment":
+            if method == "generalize":
+                anonymised_df.at[row , column] = generalize_age(
+                    anonymised_df.at[row , column]
+                    )
+        
         elif column in ["Birth Date", "Assessment Date"]:
             if method == "redact":
-                anonymized_df.at[row, column] = redact_date(
-                    anonymized_df.at[row, column])
+                anonymised_df.at[row, column] = redact_date(
+                    anonymised_df.at[row, column])
             elif method == "mask":
                 anonymised_df.at[row , column] = mask_date(
                     anonymised_df.at[row , column]
                     )
+            elif method == "generalize":
+                anonymised_df.at[row , column] = generalize_date(
+                    anonymised_df.at[row , column]
+                    )
+                
     return anonymised_df
