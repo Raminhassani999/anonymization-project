@@ -1,5 +1,7 @@
 ANONYMIZATION_POLICY = {
     "Patient Code" : "pseudonym",
+    "First Name": "mask",
+    "Surname": "mask",    
     "Tax Code" : "mask",
     "Birth Date" : "generalize",
     "Assessment Date" : "generalize",
@@ -16,18 +18,20 @@ def pseudonymize_patient_code(value):
         patient_counter += 1
     return patient_map[value]
 
-
 def redact_patient_code(value):
     return "[PATIENT_CODE]"
 
+def redact_name(value):
+    return "[NAME]"
+
+def mask_name(value):
+    return value[0] + "*" * (len(value) - 1)
 
 def redact_tax_code(value):
     return "[TAX_CODE]"
 
-
 def redact_date(value):
     return "[DATE]"
-
 
 def mask_patient_code(value):
     return value[:2] + "*" * (len(value) - 2)
@@ -64,7 +68,7 @@ def generalize_age(value):
 
         return f"{lower}-{upper}"
 
-    except:
+    except ValueError:
         return value
 
 def anonymize_dataframe(df , detections):
@@ -87,8 +91,6 @@ def anonymize_dataframe(df , detections):
                     anonymised_df.at[row , column]
                 )  
                 
-                
-                
         elif column == "Tax Code":
             if method == "redact":
                 anonymised_df.at[row, column] = redact_tax_code(
@@ -96,6 +98,16 @@ def anonymize_dataframe(df , detections):
             elif method == 'mask':
                 anonymised_df.at[row , column] = mask_tax_code(
                     anonymised_df.at[row , column]
+                    )
+                
+        elif column in ["First Name" , "Surname"]:
+            if method == "redact":
+                anonymised_df.at[row, column] = redact_name(
+                    anonymised_df.at[row, column]
+                    )
+            elif method == "mask":
+                anonymised_df.at[row, column] = mask_name(
+                    anonymised_df.at[row, column]
                     )
         elif column == "Age At Assessment":
             if method == "generalize":
@@ -115,5 +127,4 @@ def anonymize_dataframe(df , detections):
                 anonymised_df.at[row , column] = generalize_date(
                     anonymised_df.at[row , column]
                     )
-                
     return anonymised_df
