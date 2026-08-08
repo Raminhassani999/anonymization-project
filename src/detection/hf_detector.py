@@ -25,6 +25,8 @@ def detect_hf(text, row=None, column=None):
             "column": column,
             "value": entity["word"],
             "entity": entity["entity_group"],
+            "start": entity["start"],
+            "end": entity["end"],
             "score": float(entity["score"]),
             "source": "huggingface"
         })

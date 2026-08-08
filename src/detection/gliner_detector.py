@@ -30,11 +30,13 @@ def detect_gliner(text, row=None, column=None):
 
     for entity in results:
         entities.append({
-            "row": row,
-            "column": column,
+            "row": None,
+            "column": None,
             "value": entity["text"],
             "entity": entity["label"],
-            "score": float(entity["score"]),
+            "score": entity["score"],
+            "start": entity["start"],
+            "end": entity["end"],
             "source": "gliner"
         })
 
