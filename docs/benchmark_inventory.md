@@ -129,3 +129,31 @@ The current baseline anonymization system consists of:
 The anonymization engine uses a configurable policy that assigns a different anonymization strategy to each sensitive attribute.
 
 This implementation serves as the baseline system that will later be compared with AI-based Named Entity Recognition (NER) approaches.
+
+
+Benchmark Progress Update
+
+The PII detection benchmark has been expanded to compare three AI-based approaches: spaCy, Hugging Face NER, and GLiNER. A common detector interface was introduced so that the different models can be evaluated using the same pipeline.
+
+A ground-truth dataset was created and extended to include English and Italian examples, names, locations, organizations, and dates. The evaluation was then implemented using TP, FP, FN, Precision, Recall, and F1-score.
+
+The evaluation was further improved by introducing entity spans (start / end positions) in both the ground truth and model predictions. This allows the benchmark to evaluate not only whether an entity was detected, but also whether the correct portion of the text was identified.
+
+Current results on the evaluation dataset are:
+
+Detector	Precision	Recall	F1
+spaCy	0.661	0.860	0.747
+Hugging Face	0.897	0.814	0.854
+GLiNER	0.976	0.953	0.965
+
+Based on the current dataset, GLiNER achieves the best overall detection performance, followed by Hugging Face and spaCy.
+
+Remaining benchmark tasks
+Runtime and inference-time comparison
+Model loading time
+Memory/resource usage
+Detailed false-positive and false-negative analysis
+Evaluation on a larger and more representative dataset
+Final selection of the most suitable detector or hybrid approach
+
+Current status: AI-based PII detection and accuracy benchmarking are complete at an initial level. Performance/resource benchmarking and detailed error analysis are the next steps.

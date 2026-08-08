@@ -272,3 +272,36 @@ Current policy:
   - Tax codes are correctly masked.
   - Dates are generalized to years.
   - Ages are generalized into decade intervals.
+
+
+  ## AI-Based PII Detection and Benchmarking
+
+### Completed
+
+- Added Hugging Face NER as a second AI-based PII detection approach.
+- Added GLiNER as a third AI-based PII detection approach.
+- Created a common `Detector` interface so spaCy, Hugging Face, and GLiNER can be evaluated through the same pipeline.
+- Created a ground-truth evaluation dataset containing English and Italian examples covering persons, locations, organizations, and dates.
+- Implemented TP, FP, FN, Precision, Recall, and F1-score evaluation.
+- Extended the ground truth to use character-level entity spans (`start` / `end`).
+- Updated the detectors to return their predicted entity spans.
+- Implemented span-based evaluation comparing predicted entities with the ground truth.
+
+### Current Benchmark Results
+
+| Detector | Precision | Recall | F1 |
+|---|---:|---:|---:|
+| spaCy | 0.661 | 0.860 | 0.747 |
+| Hugging Face | 0.897 | 0.814 | 0.854 |
+| GLiNER | 0.976 | 0.953 | **0.965** |
+
+GLiNER currently achieves the best overall detection performance on the evaluation dataset.
+
+### Next Steps
+
+- Benchmark inference/runtime performance.
+- Measure model loading time.
+- Measure memory/resource usage.
+- Perform detailed false-positive and false-negative analysis.
+- Expand the evaluation dataset with more representative examples.
+- Determine the most suitable detector or hybrid detection strategy.

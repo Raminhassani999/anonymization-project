@@ -246,3 +246,82 @@ To reflect this approach, the implemented anonymization framework supports:
 - Generalization
 
 Furthermore, the anonymization process is controlled through a configurable anonymization policy, allowing different anonymization strategies to be assigned to different PII attributes without modifying the anonymization logic.
+
+## PII Detection Approaches
+
+### Rule-Based / Regex Detection
+
+Rule-based detection uses predefined patterns to identify structured PII such as
+email addresses, telephone numbers, dates, tax codes, and patient identifiers.
+
+Advantages:
+- Fast and deterministic
+- Easy to understand and reproduce
+- Effective for highly structured identifiers
+
+Limitations:
+- Requires manually defined patterns
+- Limited contextual understanding
+- Can miss PII when its format varies
+- Can produce false positives for ambiguous patterns
+
+The rule-based approach is used as the deterministic baseline in this project.
+
+### spaCy NER
+
+spaCy provides pre-trained Named Entity Recognition models that identify entities
+such as persons, organizations, and locations based on linguistic context.
+
+In this project, both English and Italian spaCy models are used to improve
+multilingual entity detection.
+
+Advantages:
+- Lightweight compared with large transformer models
+- Relatively fast inference
+- Easy to integrate into Python applications
+- Supports multiple languages through different models
+
+Limitations:
+- Performance depends on the selected language model
+- Pre-trained models may not be optimized specifically for PII detection
+- Entity categories are predefined by the model
+- May produce false positives or miss domain-specific entities
+
+### Hugging Face NER
+
+Hugging Face provides access to transformer-based NER models. This project uses
+a multilingual XLM-RoBERTa-based NER model for entity detection.
+
+Advantages:
+- Strong contextual understanding
+- Multilingual support
+- Pre-trained transformer models can provide high-quality entity detection
+- Confidence scores can be used when evaluating predictions
+
+Limitations:
+- Higher computational requirements than traditional rule-based or lightweight
+  NLP approaches
+- Model loading can be relatively expensive
+- Performance depends on the selected pre-trained model
+- May require additional dependencies for tokenizer/model loading
+
+### GLiNER
+
+GLiNER is a model designed for flexible named entity recognition. Unlike
+traditional NER models with a fixed set of entity labels, GLiNER allows entity
+types to be specified for the detection task.
+
+In this project, GLiNER is used to detect categories such as persons,
+organizations, and locations.
+
+Advantages:
+- Flexible entity-label definition
+- Suitable for different PII categories
+- Strong contextual entity detection
+- Can be adapted to the categories required by the application
+
+Limitations:
+- Larger computational and memory requirements than simple rule-based methods
+- Model loading can be relatively expensive
+- Detection quality depends on the selected entity labels and model
+- Requires downloading and maintaining model weights
