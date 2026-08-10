@@ -248,6 +248,8 @@ To run the detector evaluation:
 
 ## Current Evaluation
 
+## Current Evaluation
+
 Three AI-based PII detection approaches are currently implemented:
 
 - spaCy
@@ -257,20 +259,60 @@ Three AI-based PII detection approaches are currently implemented:
 All detectors use a common interface and are evaluated against the same
 synthetic ground-truth dataset.
 
+The benchmark contains **36 text examples** and **97 annotated PII entities**,
+covering both structured records and free-text examples in English and Italian.
+
 ### Detection Results
 
-The current evaluation dataset contains 36 synthetic text examples and
-97 annotated PII entities, including 18 free-text examples and 18
-structured-style examples.
+Detection Results
 
-| Detector     | Precision | Recall | F1 |
-| ------------ | --------: | -----: | --: |
-| spaCy        |     0.461 |  0.722 | 0.562 |
-| Hugging Face |     0.826 |  0.732 | 0.776 |
-| GLiNER       |     0.892 |  0.938 | **0.915** |
+The current detection benchmark evaluates exact entity spans and normalized
+entity types using:
 
-GLiNER currently provides the highest overall detection performance on the
+True Positives (TP)
+False Positives (FP)
+False Negatives (FN)
+Precision
+Recall
+F1-score
+Overall
+Detector	Precision	Recall	F1
+spaCy	0.441	0.691	0.538
+Hugging Face	0.860	0.763	0.809
+GLiNER	0.922	0.969	0.945
+
+GLiNER currently provides the strongest overall detection performance on the
 evaluation dataset.
+
+Structured Text
+Detector	Precision	Recall	F1
+spaCy	0.323	0.574	0.413
+Hugging Face	0.809	0.704	0.752
+GLiNER	0.867	0.963	0.912
+Free Text
+Detector	Precision	Recall	F1
+spaCy	0.643	0.837	0.727
+Hugging Face	0.923	0.837	0.878
+GLiNER	1.000	0.977	0.988
+
+GLiNER performs particularly strongly on free-text examples, achieving an F1
+score of 0.988.
+
+Performance Results
+
+The performance benchmark currently uses 36 synthetic text examples.
+
+Detector	Loading Time (s)	Inference / Example (s)	Memory After Loading (MB)	Memory After Inference (MB)
+spaCy	2.3982	0.006942	329.36	330.72
+Hugging Face	4.8767	0.024776	396.61	1045.12
+GLiNER	5.0755	0.057249	418.42	1231.18
+
+spaCy is currently the fastest and most memory-efficient approach in the
+benchmark.
+
+GLiNER requires more computational resources and has the highest inference
+time and memory consumption, but provides substantially stronger detection
+accuracy.
 
 ### Structured vs. Free-Text Results
 
@@ -291,24 +333,71 @@ GLiNER achieves the strongest performance in both categories, while spaCy
 shows the largest performance difference between structured-style and
 free-text inputs.
 
+### End-to-End Anonymization
+
+A rule-based text anonymization layer was implemented to transform detected
+entities into anonymized placeholders:
+
+Entity Type	Replacement
+person	[PERSON]
+organization	[ORGANIZATION]
+location	[LOCATION]
+date	[DATE]
+misc	[MISC]
+
+The text anonymizer applies replacements from right to left so that character
+offsets remain valid when multiple entities are anonymized in the same text.
+
+The anonymization component has been tested independently with 5/5 passing
+tests.
+
+The existing DataFrame-based rule anonymizer has also been tested with
+9/9 passing tests.
+
+
+### End-to-End Results
+
+The end-to-end benchmark evaluates the output produced after passing detector
+predictions through the text anonymization layer.
+
+| Detector     | Exact Output Match | Remaining PII |
+|--------------|-------------------:|--------------:|
+| spaCy        | 2.8%               | 0 |
+| Hugging Face | 52.8%              | 2 |
+| GLiNER       | **80.6%**           | **0** |
+
+GLiNER currently provides the strongest end-to-end anonymization performance,
+with **29 of 36 examples producing an exact match with the expected anonymized
+output**.
+
+The benchmark also reports an entity-level rate of 96.9% for GLiNER. This
+corresponds to the detector's entity recall under the current evaluation
+definition and is therefore not treated as an independent anonymization
+metric.
+
+The **exact output match rate** is used as the primary end-to-end
+anonymization quality indicator.
+
+
+
 ### Error Analysis
 
-The benchmark includes diagnostic analysis of false positives, false
-negatives, entity-boundary errors, and entity-type errors.
+The benchmark includes diagnostic analysis of:
 
-The expanded evaluation shows different error patterns across the three
-detectors:
+False positives
+False negatives
+Entity-boundary errors
+Entity-type errors
 
-- **spaCy:** produces a high number of false positives on structured-style
-  inputs, including predictions over field labels and overly broad entity
-  spans. It also produces several entity-type errors.
-- **Hugging Face:** provides better precision than spaCy but misses several
-  entities, particularly dates. It also shows some confusion between
-  organization and location entities and occasional partial entity spans.
-- **GLiNER:** produces substantially fewer errors. Its remaining errors are
-  mainly related to location entities in both free-text and structured-style
-  inputs. No boundary or entity-type errors were observed in the current
-  error-analysis output.
+The analysis shows that:
+
+spaCy produces substantially more false positives and entity-type and
+boundary errors, particularly on structured examples.
+Hugging Face provides stronger precision than spaCy but still misses
+several entities, including date and location entities.
+GLiNER produces substantially fewer errors overall. Its remaining errors
+are mainly associated with specific location entities and structured-text
+boundary or entity interpretation cases.
 
 ### Structured Input Considerations
 
@@ -392,32 +481,21 @@ computational cost.
 The memory values represent process-level resident memory measurements and
 should not be interpreted as the exact model size.
 
-### Error Analysis
 
-The benchmark includes diagnostic analysis of:
-
-- False positives
-- False negatives
-- Entity-boundary errors
-- Entity-type errors
-
-The current results indicate:
-
-- **spaCy:** produces more false positives, incorrect entity types, and
-  broad or incorrect entity spans.
-- **Hugging Face:** has relatively high precision but misses several entities,
-  particularly dates, and produces some partial entity spans.
-- **GLiNER:** produces substantially fewer errors, with the remaining errors
-  mainly involving specific location entities.
 
 ### Ground-Truth Validation
 
-All current ground-truth entities were validated against their character
-offsets.
+The ground-truth dataset uses character-level entity spans with explicit
+`start` and `end` offsets.
+
+All current ground-truth entities were validated by checking that the annotated
+span corresponds exactly to the annotated entity value.
 
 ```text
-Total entities: 43
-Valid entities: 43
+Total entities: 97
+Valid entities: 97
 Invalid entities: 0
+The ground-truth generation was also updated to handle repeated entity values
+using whole-word matching and explicit occurrence selection where necessary
 
 

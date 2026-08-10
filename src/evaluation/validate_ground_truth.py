@@ -9,72 +9,126 @@ def validate_ground_truth(dataset):
 
     print("===== Ground Truth Validation =====")
 
-    for example_index, example in enumerate(dataset):
+    for example in dataset:
 
         text = example["text"]
 
-        for entity_index, entity in enumerate(
-            example["entities"]
-        ):
+        for entity in example["entities"]:
 
             total_entities += 1
 
-            value = entity["value"]
             start = entity["start"]
             end = entity["end"]
+            value = entity["value"]
 
-            extracted_value = text[start:end]
+            errors = []
 
-            if extracted_value == value:
+            # Check that offsets are integers
+            if not isinstance(start, int):
+                errors.append(
+                    "start is not an integer"
+                )
 
-                valid_entities += 1
+            if not isinstance(end, int):
+                errors.append(
+                    "end is not an integer"
+                )
 
-            else:
+            # Only perform range checks if the
+            # values are valid integers
+            if isinstance(start, int) and isinstance(end, int):
+
+                if start < 0:
+                    errors.append(
+                        "start is negative"
+                    )
+
+                if end > len(text):
+                    errors.append(
+                        "end is beyond text length"
+                    )
+
+                if start >= end:
+                    errors.append(
+                        "start must be smaller than end"
+                    )
+
+                # Most important validation:
+                # the span must actually contain
+                # the annotated entity value.
+                if (
+                    0 <= start < end <= len(text)
+                    and text[start:end] != value
+                ):
+                    errors.append(
+                        "span does not match entity value"
+                    )
+
+            if errors:
 
                 invalid_entities += 1
 
                 print("\nINVALID ENTITY")
 
                 print(
-                    f"Example: {example_index}"
+                    f"Text: {text}"
                 )
 
                 print(
-                    f"Entity: {entity_index}"
+                    f"Value: {value}"
                 )
 
                 print(
-                    f"Expected value: {value!r}"
+                    f"Entity type: "
+                    f"{entity['entity']}"
                 )
 
                 print(
-                    f"start: {start}"
+                    f"Start: {start}"
                 )
 
                 print(
-                    f"end: {end}"
+                    f"End: {end}"
                 )
 
-                print(
-                    f"Text span: {extracted_value!r}"
-                )
+                if (
+                    isinstance(start, int)
+                    and isinstance(end, int)
+                    and 0 <= start <= end <= len(text)
+                ):
+                    print(
+                        f"Actual text at span: "
+                        f"{text[start:end]}"
+                    )
 
                 print(
-                    f"Full text: {text!r}"
+                    "Errors:"
                 )
+
+                for error in errors:
+                    print(
+                        f"- {error}"
+                    )
+
+            else:
+
+                valid_entities += 1
 
     print("\n===== Summary =====")
 
     print(
-        f"Total entities: {total_entities}"
+        f"Total entities: "
+        f"{total_entities}"
     )
 
     print(
-        f"Valid entities: {valid_entities}"
+        f"Valid entities: "
+        f"{valid_entities}"
     )
 
     print(
-        f"Invalid entities: {invalid_entities}"
+        f"Invalid entities: "
+        f"{invalid_entities}"
     )
 
 

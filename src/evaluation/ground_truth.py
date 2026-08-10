@@ -1,10 +1,33 @@
-def entity(text, value, entity_type):
-    start = text.index(value)
-    end = start + len(value)
+import re
+
+
+def entity(text, value, entity_type, occurrence=1):
+
+    pattern = re.compile(
+        rf"(?<!\w){re.escape(value)}(?!\w)"
+    )
+
+    matches = list(
+        pattern.finditer(text)
+    )
+
+    if not matches:
+        raise ValueError(
+            f"Entity '{value}' not found as a "
+            f"whole-word match in: {text}"
+        )
+
+    if occurrence > len(matches):
+        raise ValueError(
+            f"Occurrence {occurrence} of '{value}' "
+            f"does not exist in: {text}"
+        )
+
+    match = matches[occurrence - 1]
 
     return {
-        "start": start,
-        "end": end,
+        "start": match.start(),
+        "end": match.end(),
         "value": value,
         "entity": entity_type
     }
