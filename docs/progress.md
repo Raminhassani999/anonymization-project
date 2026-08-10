@@ -305,3 +305,71 @@ GLiNER currently achieves the best overall detection performance on the evaluati
 - Perform detailed false-positive and false-negative analysis.
 - Expand the evaluation dataset with more representative examples.
 - Determine the most suitable detector or hybrid detection strategy.
+
+
+
+### Performance Benchmark
+
+A performance benchmark was implemented to compare model loading time,
+steady-state inference time, and process memory usage on the same hardware.
+
+The current benchmark contains 18 synthetic text examples and measures each
+detector in a separate Python process to avoid memory contamination between
+models.
+
+| Detector | Loading Time (s) | Avg. Inference / Example (s) | Memory After Loading (MB) | Memory After Inference (MB) |
+|---|---:|---:|---:|---:|
+| spaCy | 2.4785 | 0.006019 | 328.70 | 329.91 |
+| Hugging Face | 4.8681 | 0.022047 | 395.72 | 1042.75 |
+| GLiNER | 4.9420 | 0.056757 | 417.74 | 1223.95 |
+
+spaCy is currently the fastest and has the lowest measured memory footprint.
+GLiNER provides the highest detection quality but has the highest inference
+time and memory usage. Hugging Face provides an intermediate trade-off.
+
+### Error Analysis
+
+An error-analysis script was implemented to distinguish between:
+
+- False positives
+- False negatives
+- Boundary errors
+- Entity-type errors
+
+The current analysis shows that spaCy produces more false positives, incorrect
+entity types, and overly broad spans. Hugging Face has relatively high
+precision but misses several entities, particularly dates, and produces some
+partial entity spans. GLiNER produces substantially fewer errors, with the
+remaining errors concentrated mainly around specific location entities.
+
+### Ground-Truth Validation
+
+The ground-truth annotations were validated using their character-level
+`start` and `end` positions.
+
+- Total annotated entities: 43
+- Valid entity spans: 43
+- Invalid entity spans: 0
+
+Therefore, all current ground-truth character spans are internally consistent.
+
+### Current Findings
+
+GLiNER currently provides the strongest detection performance on the evaluation
+dataset, with an F1-score of 0.965. spaCy provides substantially lower
+computational cost, while Hugging Face provides an intermediate trade-off.
+
+The current results should be considered an initial benchmark because the
+evaluation dataset is still relatively small and additional benchmark
+dimensions remain to be evaluated.
+
+### Next Steps
+
+- Expand the synthetic evaluation dataset.
+- Separate quantitative results for structured fields and free-text documents.
+- Measure throughput in records/second.
+- Further investigate peak memory and model size on disk.
+- Evaluate consistency/determinism across repeated runs.
+- Perform qualitative comparison of the actual anonymized outputs.
+- Evaluate context adaptability of each approach.
+- Develop a final comparison matrix and recommendation.

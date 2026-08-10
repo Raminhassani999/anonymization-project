@@ -246,16 +246,84 @@ To run the detector evaluation:
 
 ---
 
-## Progress Log
+## Current Evaluation
 
-### 2026-08-08
+Three AI-based PII detection approaches are currently implemented:
 
-- Added Hugging Face NER as an additional AI-based PII detector.
-- Added GLiNER as a third AI-based detector.
-- Introduced a common detector interface.
-- Created a ground-truth dataset for detector evaluation.
-- Implemented TP, FP, FN, Precision, Recall, and F1-score.
-- Extended evaluation to use character-level entity spans.
-- Updated detectors to return predicted entity spans.
-- Performed the initial comparison of spaCy, Hugging Face, and GLiNER.
-- GLiNER currently achieved the highest F1-score on the evaluation dataset.
+- spaCy
+- Hugging Face NER
+- GLiNER
+
+All detectors use a common interface and are evaluated against the same
+synthetic ground-truth dataset.
+
+### Detection Results
+
+The current ground-truth dataset contains 43 annotated PII entities across
+18 synthetic text examples.
+
+| Detector     | Precision | Recall | F1 |
+| ------------ | --------: | -----: | --: |
+| spaCy        |     0.661 |  0.860 | 0.747 |
+| Hugging Face |     0.897 |  0.814 | 0.854 |
+| GLiNER       |     0.976 |  0.953 | **0.965** |
+
+GLiNER currently provides the highest detection quality on the evaluation
+dataset.
+
+The evaluation uses entity-level matching based on character-level spans
+(`start` / `end`) and normalized entity types.
+
+### Performance Results
+
+The performance benchmark currently uses 18 synthetic text examples.
+
+Each detector is evaluated in a separate Python process so that the memory
+measurements are not affected by previously loaded models.
+
+| Detector     | Loading Time (s) | Inference / Example (s) | Memory After Loading (MB) | Memory After Inference (MB) |
+| ------------ | ---------------: | ----------------------: | -------------------------: | --------------------------: |
+| spaCy        |           2.4785 |            **0.006019** |                   **328.70** |                    **329.91** |
+| Hugging Face |           4.8681 |                0.022047 |                      395.72 |                   1042.75 |
+| GLiNER       |           4.9420 |                0.056757 |                      417.74 |                   1223.95 |
+
+spaCy is currently the fastest and most lightweight approach in the benchmark.
+
+GLiNER provides the highest F1-score but requires substantially more
+computational resources.
+
+Hugging Face provides an intermediate trade-off between detection quality and
+computational cost.
+
+The memory values represent process-level resident memory measurements and
+should not be interpreted as the exact model size.
+
+### Error Analysis
+
+The benchmark includes diagnostic analysis of:
+
+- False positives
+- False negatives
+- Entity-boundary errors
+- Entity-type errors
+
+The current results indicate:
+
+- **spaCy:** produces more false positives, incorrect entity types, and
+  broad or incorrect entity spans.
+- **Hugging Face:** has relatively high precision but misses several entities,
+  particularly dates, and produces some partial entity spans.
+- **GLiNER:** produces substantially fewer errors, with the remaining errors
+  mainly involving specific location entities.
+
+### Ground-Truth Validation
+
+All current ground-truth entities were validated against their character
+offsets.
+
+```text
+Total entities: 43
+Valid entities: 43
+Invalid entities: 0
+
+
