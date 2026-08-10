@@ -44,42 +44,43 @@ The project supports:
 - Ground-truth validation
 - Automated tests
 
-                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
-                    â”‚      Input Data     â”‚
-                    â”‚ CSV / Excel / JSON  â”‚
-                    â”‚       / TXT         â”‚
-                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”ک
-                               â”‚
-                               â–¼
-                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
-                    â”‚ Universal Loader    â”‚
-                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”ک
-                               â”‚
-                               â–¼
-                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
-                    â”‚      Detection      â”‚
-                    â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-                    â”‚ Regex               â”‚
-                    â”‚ spaCy               â”‚
-                    â”‚ Hugging Face NER    â”‚
-                    â”‚ GLiNER              â”‚
-                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”ک
-                               â”‚
-                               â–¼
-                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
-                    â”‚   Anonymization     â”‚
-                    â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-                    â”‚ Pseudonymization    â”‚
-                    â”‚ Masking             â”‚
-                    â”‚ Redaction           â”‚
-                    â”‚ Generalization      â”‚
-                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”ک
-                               â”‚
-                               â–¼
-                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
-                    â”‚ Anonymized Output    â”‚
-                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”ک
-
+                   ```text
++----------------------+
+|      Input Data      |
+| CSV / Excel / JSON   |
+|       / TXT          |
++----------+-----------+
+           |
+           v
++----------------------+
+|   Universal Loader   |
++----------+-----------+
+           |
+           v
++----------------------+
+|      Detection       |
++----------------------+
+| Regex                |
+| spaCy                |
+| Hugging Face NER     |
+| GLiNER               |
++----------+-----------+
+           |
+           v
++----------------------+
+|    Anonymization     |
++----------------------+
+| Pseudonymization     |
+| Masking              |
+| Redaction            |
+| Generalization       |
++----------+-----------+
+           |
+           v
++----------------------+
+|  Anonymized Output   |
++----------------------+
+```
 
 Detection Approaches
 
@@ -441,46 +442,48 @@ End-to-End Evaluation : py -3.11 -m evaluation.end_to_end
 Structured Anonymization Tests : py -3.11 -m evaluation.test_anonymization
 Free-Text Anonymization Tests : py -3.11 -m evaluation.test_text_anonymizer
 
-src/
-â”‚
-â”œâ”€â”€ main.py
-â”‚
-â”œâ”€â”€ normalization/
-â”‚   â”œâ”€â”€ common_format.py
-â”‚   â”œâ”€â”€ csv_loader.py
-â”‚   â”œâ”€â”€ excel_loader.py
-â”‚   â”œâ”€â”€ json_loader.py
-â”‚   â”œâ”€â”€ txt_loader.py
-â”‚   â””â”€â”€ universal_loader.py
-â”‚
-â”œâ”€â”€ detection/
-â”‚   â”œâ”€â”€ detector_interface.py
-â”‚   â”œâ”€â”€ detection_engine.py
-â”‚   â”œâ”€â”€ comparison.py
-â”‚   â”œâ”€â”€ regex_detector.py
-â”‚   â”œâ”€â”€ ner_detector.py
-â”‚   â”œâ”€â”€ spacy_detector.py
-â”‚   â”œâ”€â”€ hf_detector.py
-â”‚   â”œâ”€â”€ hf_detector_class.py
-â”‚   â”œâ”€â”€ gliner_detector.py
-â”‚   â”œâ”€â”€ gliner_detector_class.py
-â”‚   â””â”€â”€ test_detectors.py
-â”‚
-â”œâ”€â”€ anonymization/
-â”‚   â”œâ”€â”€ rule_based_anonymizer.py
-â”‚   â””â”€â”€ text_anonymizer.py
-â”‚
-â””â”€â”€ evaluation/
-    â”œâ”€â”€ ground_truth.py
-    â”œâ”€â”€ validate_ground_truth.py
-    â”œâ”€â”€ evaluation.py
-    â”œâ”€â”€ performance.py
-    â”œâ”€â”€ error_analysis.py
-    â”œâ”€â”€ anonymization_error_analysis.py
-    â”œâ”€â”€ end_to_end.py
-    â”œâ”€â”€ test_anonymization.py
-    â””â”€â”€ test_text_anonymizer.py
+Repository Structure
 
+```text
+src/
+|
++-- main.py
+|
++-- normalization/
+|   +-- common_format.py
+|   +-- csv_loader.py
+|   +-- excel_loader.py
+|   +-- json_loader.py
+|   +-- txt_loader.py
+|   +-- universal_loader.py
+|
++-- detection/
+|   +-- detector_interface.py
+|   +-- detection_engine.py
+|   +-- comparison.py
+|   +-- regex_detector.py
+|   +-- ner_detector.py
+|   +-- spacy_detector.py
+|   +-- hf_detector.py
+|   +-- hf_detector_class.py
+|   +-- gliner_detector.py
+|   +-- gliner_detector_class.py
+|   +-- test_detectors.py
+|
++-- anonymization/
+|   +-- rule_based_anonymizer.py
+|   +-- text_anonymizer.py
+|
++-- evaluation/
+    +-- ground_truth.py
+    +-- validate_ground_truth.py
+    +-- evaluation.py
+    +-- performance.py
+    +-- error_analysis.py
+    +-- anonymization_error_analysis.py
+    +-- end_to_end.py
+    +-- test_anonymization.py
+    +-- test_text_anonymizer.py
 
 ## Context-Aware Selection Strategy
 
@@ -499,9 +502,9 @@ situation.
 
 A practical deployment strategy is therefore to use a hybrid pipeline:
 
-**Structured fields â†’ deterministic rules**
+**Structured fields -> deterministic rules**
 
-**Free text â†’ context-aware NER**
+**Free text -> context-aware NER**
 
 For applications where quality is more important than latency, GLiNER is
 preferred. Where computational resources are constrained and latency is more
