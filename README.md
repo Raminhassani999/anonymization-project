@@ -44,7 +44,8 @@ The project supports:
 - Ground-truth validation
 - Automated tests
 
-                   ```text
+
+```text
 +----------------------+
 |      Input Data      |
 | CSV / Excel / JSON   |
@@ -484,6 +485,7 @@ src/
     +-- end_to_end.py
     +-- test_anonymization.py
     +-- test_text_anonymizer.py
+```
 
 ## Context-Aware Selection Strategy
 
