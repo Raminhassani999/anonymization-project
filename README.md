@@ -13,32 +13,36 @@ The system is divided into four main stages:
 
 ```text
 Input Data
-    ↓
+    |
+    v
 Normalization / Loading
-    ↓
+    |
+    v
 PII Detection
-    ↓
+    |
+    v
 PII Anonymization
-    ↓
+    |
+    v
 Anonymized Output
 ```
 
 The project supports:
 
-Structured data anonymization
-Free-text PII detection
-Multiple NER-based detection approaches
-Rule-based PII detection
-Pseudonymization
-Masking
-Redaction
-Generalization
-Detection evaluation
-Error analysis
-Performance benchmarking
-End-to-end anonymization evaluation
-Ground-truth validation
-Automated tests
+- Structured data anonymization
+- Free-text PII detection
+- Multiple NER-based detection approaches
+- Rule-based PII detection
+- Pseudonymization
+- Masking
+- Redaction
+- Generalization
+- Detection evaluation
+- Error analysis
+- Performance benchmarking
+- End-to-end anonymization evaluation
+- Ground-truth validation
+- Automated tests
 
                     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”گ
                     â”‚      Input Data     â”‚
