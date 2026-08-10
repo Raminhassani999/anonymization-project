@@ -1,273 +1,212 @@
-# Building AI-Based Information Systems
+# PII Anonymization Project
 
-# Automatic and Semi-Automatic Data Anonymization
+A modular Python project for detecting and anonymizing Personally Identifiable Information (PII) in structured and free-text data.
+
+The project implements multiple PII detection approaches and compares their detection quality, computational performance, error characteristics, and end-to-end anonymization results.
+
+---
 
 ## Project Overview
 
-This project focuses on the automatic and semi-automatic anonymization of
-structured and unstructured data before it is made available to downstream
-AI-based information systems.
+The system is divided into four main stages:
+
+```text
+Input Data
+    ↓
+Normalization / Loading
+    ↓
+PII Detection
+    ↓
+PII Anonymization
+    ↓
+Anonymized Output
+
+The project supports:
+
+Structured data anonymization
+Free-text PII detection
+Multiple NER-based detection approaches
+Rule-based PII detection
+Pseudonymization
+Masking
+Redaction
+Generalization
+Detection evaluation
+Error analysis
+Performance benchmarking
+End-to-end anonymization evaluation
+Ground-truth validation
+Automated tests
+
+                    ┌─────────────────────┐
+                    │      Input Data     │
+                    │ CSV / Excel / JSON  │
+                    │       / TXT         │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Universal Loader    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │      Detection      │
+                    ├─────────────────────┤
+                    │ Regex               │
+                    │ spaCy               │
+                    │ Hugging Face NER    │
+                    │ GLiNER              │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Anonymization     │
+                    ├─────────────────────┤
+                    │ Pseudonymization    │
+                    │ Masking             │
+                    │ Redaction           │
+                    │ Generalization      │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Anonymized Output    │
+                    └─────────────────────┘
+
+
+Detection Approaches
+
+Three AI-based NER approaches are implemented:
+
+spaCy
+Hugging Face NER
+GLiNER
 
-The main objective is to detect Personally Identifiable Information (PII),
-apply appropriate anonymization techniques, and evaluate different detection
-approaches on a shared synthetic dataset.
+A rule-based regular-expression detector is also used for structured PII fields.
 
-The project currently focuses on tabular medical data and combines
-deterministic rule-based detection with AI-based Named Entity Recognition
-(NER) approaches.
+All NER detectors follow a common detector interface.
 
----
+Structured Data
 
-## Project Goals
+The current synthetic diabetology dataset contains structured PII fields such as:
 
-The main goals of the project are:
+Patient Code
+First Name
+Surname
+Tax Code
+Birth Date
+Assessment Date
+Age At Assessment
 
-- Normalize input data into a common representation.
-- Detect PII in structured and free-text data.
-- Apply different anonymization techniques depending on the type of PII.
-- Compare multiple PII detection approaches using a common interface.
-- Evaluate detection quality using reproducible metrics.
-- Compare approaches in terms of accuracy, runtime, and resource usage.
-- Identify the most suitable approach or combination of approaches for the
-  target data.
+These structured fields are handled by the regex-based detection and rule-based anonymization pipeline.
 
----
 
-## Current Data
+Free Text
 
-The current application dataset is a synthetic diabetology dataset stored in
-Excel format.
+The NER approaches are evaluated on synthetic free-text examples containing entities such as:
 
-The dataset contains fields including:
+Person
+Location
+Organization
+Date
+Miscellaneous entities
 
-- Patient Code
-- First Name
-- Surname
-- Tax Code
-- Birth Date
-- Assessment Date
-- Age At Assessment
+The NER detector can be selected through the application interface:
+spacy
+huggingface
+gliner
+The current diabetology Excel dataset does not contain a dedicated free-text column, so its structured PII is handled through the structured detection path
 
-No real personal data is used in the evaluation.
 
----
+Anonymization Methods
 
-## Current Architecture
+Different PII fields use different anonymization policies.
 
-The current pipeline is:
+| PII Field         | Method           |
+| ----------------- | ---------------- |
+| Patient Code      | Pseudonymization |
+| First Name        | Masking          |
+| Surname           | Masking          |
+| Tax Code          | Masking          |
+| Birth Date        | Generalization   |
+| Assessment Date   | Generalization   |
+| Age At Assessment | Generalization   |
 
-    Input file
-        ↓
-    Universal loader
-        ↓
-    Normalized data
-        ↓
-    PII detection
-        ↓
-    Anonymization
-        ↓
-    Anonymized output
+Examples
 
-The detection component currently includes:
+Patient codes are pseudonymized consistently:
 
-    PII Detection
-        ├── Rule-based / Regex
-        ├── spaCy NER
-        ├── Hugging Face NER
-        └── GLiNER
+Original:
+A12345
 
-The AI-based detectors use a common `Detector` interface so that they can be
-evaluated through the same pipeline.
+Anonymized:
+PATIENT_0001
 
----
+Names are masked:
 
-## Anonymization Methods
+Mario
+M****
 
-Different PII fields currently use different anonymization strategies.
+Tax codes are partially masked:
 
-| PII Field | Method |
-|---|---|
-| Patient Code | Pseudonymization |
-| First Name | Masking |
-| Surname | Masking |
-| Tax Code | Masking |
-| Birth Date | Generalization |
-| Assessment Date | Generalization |
-| Age At Assessment | Generalization |
+MRLXXXXXX1234U
+MRL***********4U
 
-For example, patient codes are converted into consistent pseudonyms such as:
+Dates are generalized to their year:
 
-    PATIENT_0001
+15/03/1985
+1985
 
-Age is generalized into ranges such as:
+Ages are generalized into ranges:
 
-    70-79
+74
+70-79
 
-Dates are generalized to preserve useful information while reducing the
-amount of identifying information retained.
 
----
+Free-Text Anonymization
 
-## AI-Based PII Detection
+Detected entities in free text are replaced according to their entity type.
 
-Three AI-based approaches are currently implemented:
+| Entity Type  | Replacement      |
+| ------------ | ---------------- |
+| Person       | `[PERSON]`       |
+| Organization | `[ORGANIZATION]` |
+| Location     | `[LOCATION]`     |
+| Date         | `[DATE]`         |
+| Misc         | `[MISC]`         |
 
-### spaCy
 
-spaCy NER models are used for named entity detection. Both English and
-Italian models are currently used.
+Detected entities are replaced from right to left so that replacing one entity does not invalidate the character offsets of entities appearing earlier in the text
 
-### Hugging Face
 
-A multilingual transformer-based NER model is used for contextual entity
-detection.
 
-### GLiNER
 
-GLiNER is used as a flexible NER approach where entity categories can be
-specified for the detection task.
+Evaluation Dataset
 
-All three approaches produce a common detection format and can therefore be
-evaluated using the same benchmark.
+The evaluation uses a synthetic ground-truth dataset containing:
 
----
+Total entities: 97
+Valid entities: 97
+Invalid entities: 0
 
-## Evaluation
+All 97 ground-truth entities were validated against their character offsets.
 
-A manually annotated ground-truth dataset has been created for evaluating the
-AI-based detectors.
+The validation checks include:
 
-The evaluation dataset currently contains English and Italian examples
-covering entities such as:
+Start and end offsets are integers
+Offsets are within the text boundaries
+Start is smaller than end
+The annotated span exactly matches the expected entity value
 
-- Persons
-- Locations
-- Organizations
-- Dates
+Therefore:
 
-The ground truth uses character-level entity spans (`start` and `end`
-positions). The detectors also return predicted entity spans, allowing the
-evaluation to compare both the entity type and its exact position in the text.
+97/97 ground-truth entities are valid
 
-The current evaluation uses:
 
-- True Positive (TP)
-- False Positive (FP)
-- False Negative (FN)
-- Precision
-- Recall
-- F1-score
+Detection Evaluation
 
-### Current Results
-
-| Detector | Precision | Recall | F1 |
-|---|---:|---:|---:|
-| spaCy | 0.661 | 0.860 | 0.747 |
-| Hugging Face | 0.897 | 0.814 | 0.854 |
-| GLiNER | 0.976 | 0.953 | **0.965** |
-
-On the current evaluation dataset, GLiNER achieves the highest F1-score.
-
-These results are preliminary and will be complemented by runtime,
-memory/resource measurements, and detailed error analysis.
-
----
-
-## Repository Structure
-
-The project is currently organized approximately as follows:
-
-    src/
-    ├── normalization/
-    ├── detection/
-    ├── anonymization/
-    └── evaluation/
-
-    data/
-    output/
-
-The detection module contains the different PII detection approaches, while
-the anonymization module contains the rule-based anonymization logic.
-Evaluation contains the ground truth and detector benchmarking code.
-
----
-
-## How to Run
-
-Set the Python path to the `src` directory:
-
-    $env:PYTHONPATH="src"
-
-Run the main anonymization pipeline:
-
-    py -3.11 src/main.py
-
-The anonymized dataset is written to:
-
-    output/anonymized_dataset.xlsx
-
-To run the detector evaluation:
-
-    py -3.11 -m evaluation.evaluation
-
----
-
-## Current Status
-
-### Completed
-
-- [x] Universal data loading / normalization
-- [x] Rule-based PII detection
-- [x] Rule-based anonymization
-- [x] Patient-code pseudonymization
-- [x] Name and tax-code masking
-- [x] Date and age generalization
-- [x] spaCy NER detector
-- [x] Hugging Face NER detector
-- [x] GLiNER detector
-- [x] Common detector interface
-- [x] Ground-truth evaluation dataset
-- [x] TP / FP / FN evaluation
-- [x] Precision / Recall / F1 evaluation
-- [x] Character-level span evaluation
-- [x] Initial comparison of the three AI-based detectors
-
-### Next Steps
-
-- [ ] Runtime / inference-time benchmarking
-- [ ] Model loading-time comparison
-- [ ] Memory and resource-usage comparison
-- [ ] Detailed false-positive and false-negative analysis
-- [ ] Expand the evaluation dataset
-- [ ] Qualitative comparison of anonymization outputs
-- [ ] Final detector / hybrid strategy selection
-- [ ] Further integration and reproducibility work
-- [ ] Docker / Docker Compose deployment
-
----
-
-## Current Evaluation
-
-## Current Evaluation
-
-Three AI-based PII detection approaches are currently implemented:
-
-- spaCy
-- Hugging Face NER
-- GLiNER
-
-All detectors use a common interface and are evaluated against the same
-synthetic ground-truth dataset.
-
-The benchmark contains **36 text examples** and **97 annotated PII entities**,
-covering both structured records and free-text examples in English and Italian.
-
-### Detection Results
-
-Detection Results
-
-The current detection benchmark evaluates exact entity spans and normalized
-entity types using:
+The detectors are evaluated using:
 
 True Positives (TP)
 False Positives (FP)
@@ -275,227 +214,283 @@ False Negatives (FN)
 Precision
 Recall
 F1-score
-Overall
-Detector	Precision	Recall	F1
-spaCy	0.441	0.691	0.538
-Hugging Face	0.860	0.763	0.809
-GLiNER	0.922	0.969	0.945
 
-GLiNER currently provides the strongest overall detection performance on the
-evaluation dataset.
+A prediction is considered correct when the predicted entity span and normalized entity type match the corresponding ground-truth entity.
 
-Structured Text
-Detector	Precision	Recall	F1
-spaCy	0.323	0.574	0.413
-Hugging Face	0.809	0.704	0.752
-GLiNER	0.867	0.963	0.912
-Free Text
-Detector	Precision	Recall	F1
-spaCy	0.643	0.837	0.727
-Hugging Face	0.923	0.837	0.878
-GLiNER	1.000	0.977	0.988
+Final Detection Results
 
-GLiNER performs particularly strongly on free-text examples, achieving an F1
-score of 0.988.
+| Detector     | Overall Precision | Overall Recall | Overall F1 |
+| ------------ | ----------------: | -------------: | ---------: |
+| spaCy        |             0.441 |          0.691 |      0.538 |
+| Hugging Face |             0.860 |          0.763 |      0.809 |
+| **GLiNER**   |         **0.922** |      **0.969** |  **0.945** |
+GLiNER currently provides the highest overall detection quality on the evaluation dataset.
 
-Performance Results
+Structured Detection Results
 
-The performance benchmark currently uses 36 synthetic text examples.
+| Detector     | Precision |    Recall |        F1 |
+| ------------ | --------: | --------: | --------: |
+| spaCy        |     0.323 |     0.574 |     0.413 |
+| Hugging Face |     0.809 |     0.704 |     0.752 |
+| **GLiNER**   | **0.867** | **0.963** | **0.912** |
 
-Detector	Loading Time (s)	Inference / Example (s)	Memory After Loading (MB)	Memory After Inference (MB)
-spaCy	2.3982	0.006942	329.36	330.72
-Hugging Face	4.8767	0.024776	396.61	1045.12
-GLiNER	5.0755	0.057249	418.42	1231.18
+GLiNER also provides the strongest performance on the structured portion of the evaluation dataset.
 
-spaCy is currently the fastest and most memory-efficient approach in the
-benchmark.
+Free-Text Detection Results
 
-GLiNER requires more computational resources and has the highest inference
-time and memory consumption, but provides substantially stronger detection
-accuracy.
+| Detector     | Precision |    Recall |        F1 |
+| ------------ | --------: | --------: | --------: |
+| spaCy        |     0.643 |     0.837 |     0.727 |
+| Hugging Face |     0.923 |     0.837 |     0.878 |
+| **GLiNER**   | **1.000** | **0.977** | **0.988** |
 
-### Structured vs. Free-Text Results
-
-The benchmark separates structured-style examples from free-text examples
-to evaluate whether detection performance changes depending on the input
-format.
-
-| Detector     | Structured F1 | Free-Text F1 |
-| ------------ | ------------: | -----------: |
-| spaCy        | 0.440 | 0.747 |
-| Hugging Face | 0.713 | 0.854 |
-| GLiNER       | **0.877** | **0.965** |
-
-All three detectors currently perform better on free-text examples than on
-structured-style examples.
-
-GLiNER achieves the strongest performance in both categories, while spaCy
-shows the largest performance difference between structured-style and
-free-text inputs.
-
-### End-to-End Anonymization
-
-A rule-based text anonymization layer was implemented to transform detected
-entities into anonymized placeholders:
-
-Entity Type	Replacement
-person	[PERSON]
-organization	[ORGANIZATION]
-location	[LOCATION]
-date	[DATE]
-misc	[MISC]
-
-The text anonymizer applies replacements from right to left so that character
-offsets remain valid when multiple entities are anonymized in the same text.
-
-The anonymization component has been tested independently with 5/5 passing
-tests.
-
-The existing DataFrame-based rule anonymizer has also been tested with
-9/9 passing tests.
-
-
-### End-to-End Results
-
-The end-to-end benchmark evaluates the output produced after passing detector
-predictions through the text anonymization layer.
-
-| Detector     | Exact Output Match | Remaining PII |
-|--------------|-------------------:|--------------:|
-| spaCy        | 2.8%               | 0 |
-| Hugging Face | 52.8%              | 2 |
-| GLiNER       | **80.6%**           | **0** |
-
-GLiNER currently provides the strongest end-to-end anonymization performance,
-with **29 of 36 examples producing an exact match with the expected anonymized
-output**.
-
-The benchmark also reports an entity-level rate of 96.9% for GLiNER. This
-corresponds to the detector's entity recall under the current evaluation
-definition and is therefore not treated as an independent anonymization
-metric.
-
-The **exact output match rate** is used as the primary end-to-end
-anonymization quality indicator.
+GLiNER achieves the highest free-text detection quality, with an F1-score of 0.988.
 
 
 
-### Error Analysis
 
-The benchmark includes diagnostic analysis of:
+Error Analysis
+
+The evaluation includes diagnostic analysis of:
 
 False positives
 False negatives
 Entity-boundary errors
 Entity-type errors
 
-The analysis shows that:
+The results show different error characteristics for each detector.
 
-spaCy produces substantially more false positives and entity-type and
-boundary errors, particularly on structured examples.
-Hugging Face provides stronger precision than spaCy but still misses
-several entities, including date and location entities.
-GLiNER produces substantially fewer errors overall. Its remaining errors
-are mainly associated with specific location entities and structured-text
-boundary or entity interpretation cases.
+spaCy
 
-### Structured Input Considerations
+spaCy produces substantially more false positives and entity-type/boundary errors.
 
-The structured-style benchmark represents PII using key-value-like text
-fields, such as `Name`, `City`, `Hospital`, and `Date`.
+Its main advantage is computational efficiency rather than detection accuracy.
 
-These field labels are not annotated as PII. Predictions over field labels are
-therefore counted as false positives. This tests whether a detector can
-distinguish between schema labels and the actual PII values contained in the
-input.
+Hugging Face
 
-### Current Benchmark Summary
+Hugging Face provides substantially better precision than spaCy and achieves an intermediate overall F1-score.
 
-The current benchmark contains:
+Some missed entities remain, particularly date entities and partial entity spans.
 
-- **36 synthetic text examples**
-- **18 free-text examples**
-- **18 structured-style examples**
-- **97 annotated PII entities**
+GLiNER
 
-The benchmark currently evaluates:
+GLiNER produces substantially fewer errors than the other approaches.
 
-- Detection accuracy
-- Precision, Recall, and F1-score
-- Structured vs. free-text performance
-- Model loading time
-- Inference time
-- Memory usage
-- False-positive analysis
-- False-negative analysis
-- Entity-boundary errors
-- Entity-type errors
-- Ground-truth span validity
-
-All 97 ground-truth entities currently pass span validation.
-
-### Current Conclusion
-
-GLiNER currently provides the highest overall PII detection performance,
-with an F1-score of **0.915**.
-
-It also achieves the highest performance on both structured-style inputs
-(F1 = **0.877**) and free-text inputs (F1 = **0.965**).
-
-spaCy is the fastest and most memory-efficient detector in the current
-benchmark, but provides substantially lower detection quality, particularly
-on structured-style inputs.
-
-Hugging Face provides an intermediate trade-off between detection quality
-and computational cost.
+Its remaining errors are limited compared with spaCy and Hugging Face, resulting in the highest overall F1-score.
 
 
-### Performance Results
+Performance Benchmark
 
-The performance benchmark currently uses 36 synthetic text examples.
+The performance benchmark uses
+Number of examples: 36
 
-Each detector is evaluated in a separate Python process so that memory
-measurements are not affected by previously loaded models.
+The benchmark measures:
+
+Model loading time
+Average inference time per example
+Memory after model loading
+Memory after inference
+
+
+Final Performance Results
 
 | Detector     | Loading Time (s) | Inference / Example (s) | Memory After Loading (MB) | Memory After Inference (MB) |
-| ------------ | ---------------: | ----------------------: | -------------------------: | --------------------------: |
-| spaCy        |           2.3982 |                  0.006942 |                     329.36 |                     330.72 |
-| Hugging Face |           4.8767 |                  0.024776 |                     396.61 |                    1045.12 |
-| GLiNER       |           5.0755 |                  0.057249 |                     418.42 |                    1231.18 |
+| ------------ | ---------------: | ----------------------: | ------------------------: | --------------------------: |
+| spaCy        |           2.5090 |            **0.007005** |                **328.99** |                  **330.28** |
+| Hugging Face |           4.9060 |                0.024019 |                    395.88 |                     1044.18 |
+| GLiNER       |           4.9215 |                0.057125 |                    418.34 |                     1230.72 |
+
+Performance Interpretation
+
+spaCy is the most computationally efficient approach in the benchmark.
+
+It provides:
+
+Lowest loading time
+Lowest inference time
+Lowest memory usage
+
+GLiNER provides the highest detection quality but requires substantially more computational resources.
+
+Hugging Face provides an intermediate trade-off between computational cost and detection quality.
+
+Therefore, the results demonstrate a clear trade-off between anonymization quality and computational efficiency.
+
+End-to-End Anonymization Evaluation
+
+The end-to-end benchmark evaluates the final anonymized output produced after passing detector predictions through the text anonymization layer.
+
+The benchmark contains:
+Examples: 36
+Ground-truth entities: 97
+
+The evaluation reports:
+
+Entity anonymization rate
+Remaining PII entities
+Exact anonymized output matches
+
+Final End-to-End Results
+
+| Detector     | Entity Anonymization Rate | Exact Output Match | Remaining PII |
+| ------------ | ------------------------: | -----------------: | ------------: |
+| spaCy        |                     69.1% |               2.8% |             0 |
+| Hugging Face |                     76.3% |              52.8% |             2 |
+| **GLiNER**   |                 **96.9%** |          **80.6%** |         **0** |
+
+GLiNER provides the strongest end-to-end anonymization performance.
+
+It correctly anonymizes 94 of 97 ground-truth entities, with 29 of 36 examples producing an exact match with the expected anonymized output.
+
+The entity-level anonymization rate reflects entity-level detection performance under the current evaluation definition and is therefore not treated as an independent anonymization quality metric.
+
+The exact output match rate is used as the primary end-to-end anonymization quality indicator.
+
+GLiNER achieves:
+
+96.9% entity-level anonymization
+80.6% exact output match
+0 remaining PII entities
 
 
-| Detector     | Precision | Recall | F1 |
-| ------------ | --------: | -----: | --: |
-| spaCy        |     0.461 |  0.722 | 0.562 |
-| Hugging Face |     0.826 |  0.732 | 0.776 |
-| GLiNER       |     0.892 |  0.938 | **0.915** |
+Testing
 
-spaCy is currently the fastest and most lightweight approach in the benchmark.
+the project includes tests for both structured and free-text anonymization.
 
-GLiNER provides the highest detection quality but has the highest measured
-inference time and memory usage.
+Structured Anonymization Tests
+Total tests: 9
+Passed: 9
+Failed: 0
+Tested functionality includes:
 
-Hugging Face provides an intermediate trade-off between detection quality and
-computational cost.
+First name masking
+Surname masking
+Patient code pseudonymization
+Patient code consistency
+Tax code masking
+Birth date generalization
+Assessment date generalization
+Age generalization
+Preservation of non-detected values
 
-The memory values represent process-level resident memory measurements and
-should not be interpreted as the exact model size.
+Free-Text Anonymization Tests
+Total tests: 5
+Passed: 5
+Failed: 0
 
+Tested functionality includes:
 
+Person anonymization
+Multiple entity anonymization
+Date anonymization
+Organization anonymization
+Preservation of non-PII text
+Final Test Result 
+14 / 14 tests passed
 
-### Ground-Truth Validation
+Running the Project
 
-The ground-truth dataset uses character-level entity spans with explicit
-`start` and `end` offsets.
+The project uses Python 3.11.
 
-All current ground-truth entities were validated by checking that the annotated
-span corresponds exactly to the annotated entity value.
+Set the Python path in PowerShell:
+$env:PYTHONPATH="src"
 
-```text
+Run the Anonymization Pipeline
+
+The detector can be selected from the command line.
+
+spaCy : py -3.11 -m main --detector spacy
+Hugging Face : py -3.11 -m main --detector huggingface
+GLiNER : py -3.11 -m main --detector gliner 
+The anonymized dataset is generated at: output/anonymized_dataset.xlsx
+The output/ directory is ignored by Git because the generated anonymized dataset is an output artifact rather than source code
+
+Running the Evaluation
+
+Ground-Truth Validation : py -3.11 -m evaluation.validate_ground_truth
+Expected result:
 Total entities: 97
 Valid entities: 97
 Invalid entities: 0
-The ground-truth generation was also updated to handle repeated entity values
-using whole-word matching and explicit occurrence selection where necessary
+Detection Evaluation : py -3.11 -m evaluation.evaluation
+Performance Benchmark : py -3.11 -m evaluation.performance
+Error Analysis : py -3.11 -m evaluation.error_analysis
+End-to-End Evaluation : py -3.11 -m evaluation.end_to_end
+Structured Anonymization Tests : py -3.11 -m evaluation.test_anonymization
+Free-Text Anonymization Tests : py -3.11 -m evaluation.test_text_anonymizer
+
+src/
+│
+├── main.py
+│
+├── normalization/
+│   ├── common_format.py
+│   ├── csv_loader.py
+│   ├── excel_loader.py
+│   ├── json_loader.py
+│   ├── txt_loader.py
+│   └── universal_loader.py
+│
+├── detection/
+│   ├── detector_interface.py
+│   ├── detection_engine.py
+│   ├── comparison.py
+│   ├── regex_detector.py
+│   ├── ner_detector.py
+│   ├── spacy_detector.py
+│   ├── hf_detector.py
+│   ├── hf_detector_class.py
+│   ├── gliner_detector.py
+│   ├── gliner_detector_class.py
+│   └── test_detectors.py
+│
+├── anonymization/
+│   ├── rule_based_anonymizer.py
+│   └── text_anonymizer.py
+│
+└── evaluation/
+    ├── ground_truth.py
+    ├── validate_ground_truth.py
+    ├── evaluation.py
+    ├── performance.py
+    ├── error_analysis.py
+    ├── anonymization_error_analysis.py
+    ├── end_to_end.py
+    ├── test_anonymization.py
+    └── test_text_anonymizer.py
 
 
+## Conclusion
+
+The project demonstrates a complete PII anonymization pipeline covering
+structured data and free-text entity detection.
+
+The evaluation shows a clear trade-off between detection quality and
+computational cost.
+
+**spaCy** provides the lowest computational cost and fastest inference,
+making it the most lightweight option.
+
+**Hugging Face NER** provides an intermediate trade-off between
+computational cost and detection quality.
+
+**GLiNER** achieves the highest detection quality in the current evaluation,
+with:
+
+- Overall F1: **0.945**
+- Structured F1: **0.912**
+- Free-text F1: **0.988**
+
+GLiNER also achieves the strongest end-to-end anonymization result:
+
+- Entity anonymization rate: **96.9%**
+- Exact output match rate: **80.6%**
+- Remaining PII entities: **0**
+
+Therefore, **GLiNER is the strongest option when anonymization quality is the
+primary objective**, while **spaCy is preferable when computational
+efficiency is the primary constraint**.
+
+The current evaluation is based on a synthetic dataset and should therefore
+be interpreted as a controlled benchmark rather than a guarantee of
+performance on real-world data.
