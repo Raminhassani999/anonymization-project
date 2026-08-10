@@ -476,6 +476,31 @@ src/
     └── test_text_anonymizer.py
 
 
+## Context-Aware Selection Strategy
+
+The benchmark suggests that detector selection should depend on the operational
+requirements of the application rather than using a single detector for every
+situation.
+
+| Context | Recommended Approach | Reason |
+|---|---|---|
+| High anonymization quality | GLiNER | Highest overall F1 and end-to-end exact match |
+| Complex free text | GLiNER | Strongest free-text F1 |
+| Low-latency / resource-constrained | spaCy | Fastest inference and lowest memory footprint |
+| Balanced quality and resources | Hugging Face | Intermediate performance/resource trade-off |
+| Highly structured identifiers | Regex + rule-based anonymization | Deterministic and predictable |
+| Mixed structured + free text | Regex + GLiNER | Combines deterministic identifier handling with contextual NER |
+
+A practical deployment strategy is therefore to use a hybrid pipeline:
+
+**Structured fields → deterministic rules**
+
+**Free text → context-aware NER**
+
+For applications where quality is more important than latency, GLiNER is
+preferred. Where computational resources are constrained and latency is more
+important, spaCy provides a lighter alternative.
+
 ## Conclusion
 
 The project demonstrates a complete PII anonymization pipeline covering
@@ -487,8 +512,8 @@ computational cost.
 **spaCy** provides the lowest computational cost and fastest inference,
 making it the most lightweight option.
 
-**Hugging Face NER** provides an intermediate trade-off between
-computational cost and detection quality.
+**Hugging Face NER** provides an intermediate trade-off between computational
+cost and detection quality.
 
 **GLiNER** achieves the highest detection quality in the current evaluation,
 with:
@@ -510,25 +535,3 @@ efficiency is the primary constraint**.
 The current evaluation is based on a synthetic dataset and should therefore
 be interpreted as a controlled benchmark rather than a guarantee of
 performance on real-world data.
-
-
-## Context-Aware Selection Strategy
-
-The benchmark suggests that detector selection should depend on the operational requirements of the application rather than using a single detector for every situation.
-
-| Context                            | Recommended Approach             | Reason                                                         |
-| ---------------------------------- | -------------------------------- | -------------------------------------------------------------- |
-| High anonymization quality         | GLiNER                           | Highest overall F1 and end-to-end exact match                  |
-| Complex free text                  | GLiNER                           | Strongest free-text F1                                         |
-| Low-latency / resource-constrained | spaCy                            | Fastest inference and lowest memory footprint                  |
-| Balanced quality and resources     | Hugging Face                     | Intermediate performance/resource trade-off                    |
-| Highly structured identifiers      | Regex + rule-based anonymization | Deterministic and predictable                                  |
-| Mixed structured + free text       | Regex + GLiNER                   | Combines deterministic identifier handling with contextual NER |
-
-A practical deployment strategy is therefore to use a hybrid pipeline:
-
-**structured fields → deterministic rules**
-
-**free text → context-aware NER**
-
-For applications where quality is more important than latency, GLiNER is preferred. Where computational resources are constrained and latency is more important, spaCy provides a lighter alternative.
