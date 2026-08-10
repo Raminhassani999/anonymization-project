@@ -259,38 +259,132 @@ synthetic ground-truth dataset.
 
 ### Detection Results
 
-The current ground-truth dataset contains 43 annotated PII entities across
-18 synthetic text examples.
+The current evaluation dataset contains 36 synthetic text examples and
+97 annotated PII entities, including 18 free-text examples and 18
+structured-style examples.
 
 | Detector     | Precision | Recall | F1 |
 | ------------ | --------: | -----: | --: |
-| spaCy        |     0.661 |  0.860 | 0.747 |
-| Hugging Face |     0.897 |  0.814 | 0.854 |
-| GLiNER       |     0.976 |  0.953 | **0.965** |
+| spaCy        |     0.461 |  0.722 | 0.562 |
+| Hugging Face |     0.826 |  0.732 | 0.776 |
+| GLiNER       |     0.892 |  0.938 | **0.915** |
 
-GLiNER currently provides the highest detection quality on the evaluation
-dataset.
+GLiNER currently provides the highest overall detection performance on the
+evaluation dataset.
 
-The evaluation uses entity-level matching based on character-level spans
-(`start` / `end`) and normalized entity types.
+### Structured vs. Free-Text Results
+
+The benchmark separates structured-style examples from free-text examples
+to evaluate whether detection performance changes depending on the input
+format.
+
+| Detector     | Structured F1 | Free-Text F1 |
+| ------------ | ------------: | -----------: |
+| spaCy        | 0.440 | 0.747 |
+| Hugging Face | 0.713 | 0.854 |
+| GLiNER       | **0.877** | **0.965** |
+
+All three detectors currently perform better on free-text examples than on
+structured-style examples.
+
+GLiNER achieves the strongest performance in both categories, while spaCy
+shows the largest performance difference between structured-style and
+free-text inputs.
+
+### Error Analysis
+
+The benchmark includes diagnostic analysis of false positives, false
+negatives, entity-boundary errors, and entity-type errors.
+
+The expanded evaluation shows different error patterns across the three
+detectors:
+
+- **spaCy:** produces a high number of false positives on structured-style
+  inputs, including predictions over field labels and overly broad entity
+  spans. It also produces several entity-type errors.
+- **Hugging Face:** provides better precision than spaCy but misses several
+  entities, particularly dates. It also shows some confusion between
+  organization and location entities and occasional partial entity spans.
+- **GLiNER:** produces substantially fewer errors. Its remaining errors are
+  mainly related to location entities in both free-text and structured-style
+  inputs. No boundary or entity-type errors were observed in the current
+  error-analysis output.
+
+### Structured Input Considerations
+
+The structured-style benchmark represents PII using key-value-like text
+fields, such as `Name`, `City`, `Hospital`, and `Date`.
+
+These field labels are not annotated as PII. Predictions over field labels are
+therefore counted as false positives. This tests whether a detector can
+distinguish between schema labels and the actual PII values contained in the
+input.
+
+### Current Benchmark Summary
+
+The current benchmark contains:
+
+- **36 synthetic text examples**
+- **18 free-text examples**
+- **18 structured-style examples**
+- **97 annotated PII entities**
+
+The benchmark currently evaluates:
+
+- Detection accuracy
+- Precision, Recall, and F1-score
+- Structured vs. free-text performance
+- Model loading time
+- Inference time
+- Memory usage
+- False-positive analysis
+- False-negative analysis
+- Entity-boundary errors
+- Entity-type errors
+- Ground-truth span validity
+
+All 97 ground-truth entities currently pass span validation.
+
+### Current Conclusion
+
+GLiNER currently provides the highest overall PII detection performance,
+with an F1-score of **0.915**.
+
+It also achieves the highest performance on both structured-style inputs
+(F1 = **0.877**) and free-text inputs (F1 = **0.965**).
+
+spaCy is the fastest and most memory-efficient detector in the current
+benchmark, but provides substantially lower detection quality, particularly
+on structured-style inputs.
+
+Hugging Face provides an intermediate trade-off between detection quality
+and computational cost.
+
 
 ### Performance Results
 
-The performance benchmark currently uses 18 synthetic text examples.
+The performance benchmark currently uses 36 synthetic text examples.
 
-Each detector is evaluated in a separate Python process so that the memory
+Each detector is evaluated in a separate Python process so that memory
 measurements are not affected by previously loaded models.
 
 | Detector     | Loading Time (s) | Inference / Example (s) | Memory After Loading (MB) | Memory After Inference (MB) |
 | ------------ | ---------------: | ----------------------: | -------------------------: | --------------------------: |
-| spaCy        |           2.4785 |            **0.006019** |                   **328.70** |                    **329.91** |
-| Hugging Face |           4.8681 |                0.022047 |                      395.72 |                   1042.75 |
-| GLiNER       |           4.9420 |                0.056757 |                      417.74 |                   1223.95 |
+| spaCy        |           2.3982 |                  0.006942 |                     329.36 |                     330.72 |
+| Hugging Face |           4.8767 |                  0.024776 |                     396.61 |                    1045.12 |
+| GLiNER       |           5.0755 |                  0.057249 |                     418.42 |                    1231.18 |
+
+
+| Detector     | Precision | Recall | F1 |
+| ------------ | --------: | -----: | --: |
+| spaCy        |     0.461 |  0.722 | 0.562 |
+| Hugging Face |     0.826 |  0.732 | 0.776 |
+| GLiNER       |     0.892 |  0.938 | **0.915** |
 
 spaCy is currently the fastest and most lightweight approach in the benchmark.
 
-GLiNER provides the highest F1-score but requires substantially more
-computational resources.
+GLiNER provides the highest detection quality but has the highest measured
+inference time and memory usage.
 
 Hugging Face provides an intermediate trade-off between detection quality and
 computational cost.

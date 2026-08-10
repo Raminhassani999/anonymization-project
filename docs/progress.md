@@ -373,3 +373,59 @@ dimensions remain to be evaluated.
 - Perform qualitative comparison of the actual anonymized outputs.
 - Evaluate context adaptability of each approach.
 - Develop a final comparison matrix and recommendation.
+
+
+
+## Benchmark Expansion and Error Analysis
+
+The PII detection benchmark was expanded to 36 synthetic examples,
+consisting of 18 free-text and 18 structured-style examples.
+
+The ground-truth dataset now contains 97 annotated PII entities. All entity
+character spans were validated successfully:
+
+- Total entities: 97
+- Valid entities: 97
+- Invalid entities: 0
+
+Detection evaluation was performed using TP, FP, FN, Precision, Recall, and
+F1-score.
+
+Current overall results:
+
+| Detector     | Precision | Recall | F1 |
+| ------------ | --------: | -----: | --: |
+| spaCy        | 0.461 | 0.722 | 0.562 |
+| Hugging Face | 0.826 | 0.732 | 0.776 |
+| GLiNER       | 0.892 | 0.938 | **0.915** |
+
+The benchmark was also divided into structured-style and free-text examples.
+
+| Detector     | Structured F1 | Free-Text F1 |
+| ------------ | ------------: | -----------: |
+| spaCy        | 0.440 | 0.747 |
+| Hugging Face | 0.713 | 0.854 |
+| GLiNER       | **0.877** | **0.965** |
+
+Performance benchmarking was updated to the expanded 36-example dataset.
+
+spaCy remains the fastest and most memory-efficient detector, while GLiNER
+provides the highest detection quality at the cost of higher inference time
+and memory usage.
+
+Error analysis was expanded to identify false positives, false negatives,
+boundary errors, and type errors.
+
+The analysis shows that spaCy struggles particularly with structured-style
+inputs and often predicts field labels or overly broad spans. Hugging Face
+primarily struggles with missed dates and some organization/location
+confusion. GLiNER produces substantially fewer errors, with remaining errors
+mainly involving location entities.
+
+### Next Steps
+
+- Evaluate the anonymization stage itself
+- Measure anonymization correctness against detected PII
+- Verify that non-PII text is preserved
+- Evaluate end-to-end detection + anonymization
+- Compare anonymization performance across detectors

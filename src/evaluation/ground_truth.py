@@ -14,6 +14,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Mario Rossi visited Rome.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Mario Rossi visited Rome.",
@@ -30,6 +31,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Luigi Bianchi works for Microsoft.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Luigi Bianchi works for Microsoft.",
@@ -46,6 +48,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Giulia Ferraro lives in Milan.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Giulia Ferraro lives in Milan.",
@@ -62,6 +65,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Andrea Conti moved to London.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Andrea Conti moved to London.",
@@ -78,6 +82,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Marco Bianchi vive a Messina.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Marco Bianchi vive a Messina.",
@@ -94,6 +99,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Francesca Romano lavora a Roma.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Francesca Romano lavora a Roma.",
@@ -110,6 +116,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Luca Ferrari è stato ricoverato a Milano.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Luca Ferrari è stato ricoverato a Milano.",
@@ -126,6 +133,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Anna Esposito vive in Italia.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Anna Esposito vive in Italia.",
@@ -142,6 +150,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Mario Rossi visited Policlinico di Messina.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Mario Rossi visited Policlinico di Messina.",
@@ -158,6 +167,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Luigi Bianchi works at Microsoft in Rome.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Luigi Bianchi works at Microsoft in Rome.",
@@ -179,6 +189,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Francesca Romano studies at the University of Messina.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Francesca Romano studies at the University of Messina.",
@@ -200,6 +211,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Mario Rossi was admitted on 15 March 2024.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Mario Rossi was admitted on 15 March 2024.",
@@ -216,6 +228,7 @@ GROUND_TRUTH = [
 
     {
         "text": "The appointment was scheduled for 2024-06-20.",
+        "type": "free_text",
         "entities": [
             entity(
                 "The appointment was scheduled for 2024-06-20.",
@@ -227,6 +240,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Luigi Bianchi visited Rome on 12/05/2023.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Luigi Bianchi visited Rome on 12/05/2023.",
@@ -248,6 +262,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Il paziente Marco Bianchi è stato visitato al Policlinico di Messina il 15 marzo 2024.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Il paziente Marco Bianchi è stato visitato al Policlinico di Messina il 15 marzo 2024.",
@@ -269,6 +284,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Anna Esposito ha incontrato il dottor Luca Ferrari a Roma.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Anna Esposito ha incontrato il dottor Luca Ferrari a Roma.",
@@ -290,6 +306,7 @@ GROUND_TRUTH = [
 
     {
         "text": "Mario Rossi and Luigi Bianchi travelled from Rome to Milan.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Mario Rossi and Luigi Bianchi travelled from Rome to Milan.",
@@ -311,11 +328,12 @@ GROUND_TRUTH = [
                 "Milan",
                 "location"
             )
-        ]
-    },
+    ]
+},
 
-    {
+{
         "text": "Giulia Ferraro met Andrea Conti in London.",
+        "type": "free_text",
         "entities": [
             entity(
                 "Giulia Ferraro met Andrea Conti in London.",
@@ -333,5 +351,402 @@ GROUND_TRUTH = [
                 "location"
             )
         ]
-    }
+    },
+    {
+    "text": "Name: Mario Rossi | City: Rome | Birth Date: 15 March 1985",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Mario Rossi | City: Rome | Birth Date: 15 March 1985",
+            "Mario Rossi",
+            "person"
+        ),
+        entity(
+            "Name: Mario Rossi | City: Rome | Birth Date: 15 March 1985",
+            "Rome",
+            "location"
+        ),
+        entity(
+            "Name: Mario Rossi | City: Rome | Birth Date: 15 March 1985",
+            "15 March 1985",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Patient: Luigi Bianchi | Hospital: Policlinico di Messina | City: Messina",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient: Luigi Bianchi | Hospital: Policlinico di Messina | City: Messina",
+            "Luigi Bianchi",
+            "person"
+        ),
+        entity(
+            "Patient: Luigi Bianchi | Hospital: Policlinico di Messina | City: Messina",
+            "Policlinico di Messina",
+            "organization"
+        ),
+        entity(
+            "Patient: Luigi Bianchi | Hospital: Policlinico di Messina | City: Messina",
+            "Messina",
+            "location"
+        )
+    ]
+},
+
+{
+    "text": "Full Name: Giulia Ferraro | Organization: Microsoft | Location: Milan",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Full Name: Giulia Ferraro | Organization: Microsoft | Location: Milan",
+            "Giulia Ferraro",
+            "person"
+        ),
+        entity(
+            "Full Name: Giulia Ferraro | Organization: Microsoft | Location: Milan",
+            "Microsoft",
+            "organization"
+        ),
+        entity(
+            "Full Name: Giulia Ferraro | Organization: Microsoft | Location: Milan",
+            "Milan",
+            "location"
+        )
+    ]
+},
+
+{
+    "text": "Patient Name: Marco Bianchi | Hospital: Policlinico di Messina | Admission Date: 15 March 2024",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient Name: Marco Bianchi | Hospital: Policlinico di Messina | Admission Date: 15 March 2024",
+            "Marco Bianchi",
+            "person"
+        ),
+        entity(
+            "Patient Name: Marco Bianchi | Hospital: Policlinico di Messina | Admission Date: 15 March 2024",
+            "Policlinico di Messina",
+            "organization"
+        ),
+        entity(
+            "Patient Name: Marco Bianchi | Hospital: Policlinico di Messina | Admission Date: 15 March 2024",
+            "15 March 2024",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Name: Francesca Romano | City: Roma | Employer: University of Messina",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Francesca Romano | City: Roma | Employer: University of Messina",
+            "Francesca Romano",
+            "person"
+        ),
+        entity(
+            "Name: Francesca Romano | City: Roma | Employer: University of Messina",
+            "Roma",
+            "location"
+        ),
+        entity(
+            "Name: Francesca Romano | City: Roma | Employer: University of Messina",
+            "University of Messina",
+            "organization"
+        )
+    ]
+},
+
+{
+    "text": "Name: Anna Esposito | Location: London | Appointment Date: 2024-06-20",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Anna Esposito | Location: London | Appointment Date: 2024-06-20",
+            "Anna Esposito",
+            "person"
+        ),
+        entity(
+            "Name: Anna Esposito | Location: London | Appointment Date: 2024-06-20",
+            "London",
+            "location"
+        ),
+        entity(
+            "Name: Anna Esposito | Location: London | Appointment Date: 2024-06-20",
+            "2024-06-20",
+            "date"
+        )
+    ]
+},
+{
+    "text": "Name: Luca Ferrari | City: Milano | Employer: Microsoft",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Luca Ferrari | City: Milano | Employer: Microsoft",
+            "Luca Ferrari",
+            "person"
+        ),
+        entity(
+            "Name: Luca Ferrari | City: Milano | Employer: Microsoft",
+            "Milano",
+            "location"
+        ),
+        entity(
+            "Name: Luca Ferrari | City: Milano | Employer: Microsoft",
+            "Microsoft",
+            "organization"
+        )
+    ]
+},
+
+{
+    "text": "Patient: Anna Esposito | Hospital: Policlinico di Messina | Date: 12/05/2023",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient: Anna Esposito | Hospital: Policlinico di Messina | Date: 12/05/2023",
+            "Anna Esposito",
+            "person"
+        ),
+        entity(
+            "Patient: Anna Esposito | Hospital: Policlinico di Messina | Date: 12/05/2023",
+            "Policlinico di Messina",
+            "organization"
+        ),
+        entity(
+            "Patient: Anna Esposito | Hospital: Policlinico di Messina | Date: 12/05/2023",
+            "12/05/2023",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Full Name: Andrea Conti | Location: London | Company: Microsoft",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Full Name: Andrea Conti | Location: London | Company: Microsoft",
+            "Andrea Conti",
+            "person"
+        ),
+        entity(
+            "Full Name: Andrea Conti | Location: London | Company: Microsoft",
+            "London",
+            "location"
+        ),
+        entity(
+            "Full Name: Andrea Conti | Location: London | Company: Microsoft",
+            "Microsoft",
+            "organization"
+        )
+    ]
+},
+
+{
+    "text": "Patient Name: Marco Bianchi | City: Messina | Admission Date: 15 marzo 2024",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient Name: Marco Bianchi | City: Messina | Admission Date: 15 marzo 2024",
+            "Marco Bianchi",
+            "person"
+        ),
+        entity(
+            "Patient Name: Marco Bianchi | City: Messina | Admission Date: 15 marzo 2024",
+            "Messina",
+            "location"
+        ),
+        entity(
+            "Patient Name: Marco Bianchi | City: Messina | Admission Date: 15 marzo 2024",
+            "15 marzo 2024",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Name: Francesca Romano | Location: Roma | Organization: University of Messina",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Francesca Romano | Location: Roma | Organization: University of Messina",
+            "Francesca Romano",
+            "person"
+        ),
+        entity(
+            "Name: Francesca Romano | Location: Roma | Organization: University of Messina",
+            "Roma",
+            "location"
+        ),
+        entity(
+            "Name: Francesca Romano | Location: Roma | Organization: University of Messina",
+            "University of Messina",
+            "organization"
+        )
+    ]
+},
+
+{
+    "text": "Name: Luigi Bianchi | Location: Rome | Appointment Date: 2024-06-20",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Luigi Bianchi | Location: Rome | Appointment Date: 2024-06-20",
+            "Luigi Bianchi",
+            "person"
+        ),
+        entity(
+            "Name: Luigi Bianchi | Location: Rome | Appointment Date: 2024-06-20",
+            "Rome",
+            "location"
+        ),
+        entity(
+            "Name: Luigi Bianchi | Location: Rome | Appointment Date: 2024-06-20",
+            "2024-06-20",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Name: Giulia Ferraro | City: Milan | Birth Date: 20 June 1998",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Giulia Ferraro | City: Milan | Birth Date: 20 June 1998",
+            "Giulia Ferraro",
+            "person"
+        ),
+        entity(
+            "Name: Giulia Ferraro | City: Milan | Birth Date: 20 June 1998",
+            "Milan",
+            "location"
+        ),
+        entity(
+            "Name: Giulia Ferraro | City: Milan | Birth Date: 20 June 1998",
+            "20 June 1998",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Patient: Luca Ferrari | Clinic: Policlinico di Messina | City: Messina",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient: Luca Ferrari | Clinic: Policlinico di Messina | City: Messina",
+            "Luca Ferrari",
+            "person"
+        ),
+        entity(
+            "Patient: Luca Ferrari | Clinic: Policlinico di Messina | City: Messina",
+            "Policlinico di Messina",
+            "organization"
+        ),
+        entity(
+            "Patient: Luca Ferrari | Clinic: Policlinico di Messina | City: Messina",
+            "Messina",
+            "location"
+        )
+    ]
+},
+
+{
+    "text": "Name: Mario Rossi | Employer: Microsoft | Country: Italy",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Mario Rossi | Employer: Microsoft | Country: Italy",
+            "Mario Rossi",
+            "person"
+        ),
+        entity(
+            "Name: Mario Rossi | Employer: Microsoft | Country: Italy",
+            "Microsoft",
+            "organization"
+        ),
+        entity(
+            "Name: Mario Rossi | Employer: Microsoft | Country: Italy",
+            "Italy",
+            "location"
+        )
+    ]
+},
+
+{
+    "text": "Patient: Francesca Romano | Hospital: University of Messina | Date: 15 March 2024",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Patient: Francesca Romano | Hospital: University of Messina | Date: 15 March 2024",
+            "Francesca Romano",
+            "person"
+        ),
+        entity(
+            "Patient: Francesca Romano | Hospital: University of Messina | Date: 15 March 2024",
+            "University of Messina",
+            "organization"
+        ),
+        entity(
+            "Patient: Francesca Romano | Hospital: University of Messina | Date: 15 March 2024",
+            "15 March 2024",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Name: Andrea Conti | City: London | Date: 2024-06-20",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Andrea Conti | City: London | Date: 2024-06-20",
+            "Andrea Conti",
+            "person"
+        ),
+        entity(
+            "Name: Andrea Conti | City: London | Date: 2024-06-20",
+            "London",
+            "location"
+        ),
+        entity(
+            "Name: Andrea Conti | City: London | Date: 2024-06-20",
+            "2024-06-20",
+            "date"
+        )
+    ]
+},
+
+{
+    "text": "Name: Anna Esposito | Organization: Microsoft | Location: Roma",
+    "type": "structured",
+    "entities": [
+        entity(
+            "Name: Anna Esposito | Organization: Microsoft | Location: Roma",
+            "Anna Esposito",
+            "person"
+        ),
+        entity(
+            "Name: Anna Esposito | Organization: Microsoft | Location: Roma",
+            "Microsoft",
+            "organization"
+        ),
+        entity(
+            "Name: Anna Esposito | Organization: Microsoft | Location: Roma",
+            "Roma",
+            "location"
+        )
+    ]
+},
+
+
+
 ]
