@@ -45,43 +45,14 @@ The project supports:
 - Automated tests
 
 
-```text
-+----------------------+
-|      Input Data      |
-| CSV / Excel / JSON   |
-|       / TXT          |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|   Universal Loader   |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|      Detection       |
-+----------------------+
-| Regex                |
-| spaCy                |
-| Hugging Face NER     |
-| GLiNER               |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|    Anonymization     |
-+----------------------+
-| Pseudonymization     |
-| Masking              |
-| Redaction            |
-| Generalization       |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|  Anonymized Output   |
-+----------------------+
-```
+| Stage | Component         | Description                                              |
+| ----- | ----------------- | -------------------------------------------------------- |
+| 1     | Input Data        | CSV, Excel, JSON, or TXT files                           |
+| 2     | Universal Loader  | Converts heterogeneous inputs into a common format       |
+| 3     | PII Detection     | Regex, spaCy, Hugging Face NER, or GLiNER                |
+| 4     | PII Anonymization | Pseudonymization, masking, redaction, and generalization |
+| 5     | Anonymized Output | Produces the final anonymized dataset or text            |
+
 
 Detection Approaches
 
