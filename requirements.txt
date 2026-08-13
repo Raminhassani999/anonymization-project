@@ -1,0 +1,7 @@
+pandas
+openpyxl
+spacy
+transformers
+gliner
+psutil
+matplotlib
