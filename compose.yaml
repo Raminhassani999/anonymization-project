@@ -1,0 +1,7 @@
+services:
+  anonymization:
+    build: .
+    container_name: pii-anonymization
+    volumes:
+      - ./output:/app/output
+    command: python -m main --detector spacy
