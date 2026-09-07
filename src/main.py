@@ -3,7 +3,20 @@ from detection.detection_engine import detect_all
 from anonymization.rule_based_anonymizer import anonymize_dataframe
 from anonymization.text_anonymizer import anonymize_text
 
-DETECTOR = "spacy"
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "--detector",
+    choices=["spacy", "huggingface", "gliner"],
+    default="spacy"
+)
+
+args = parser.parse_args()
+
+DETECTOR = args.detector
+
 
 NER_COLUMNS = []
 
