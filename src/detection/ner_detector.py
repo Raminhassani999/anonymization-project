@@ -14,6 +14,17 @@ def detect_ner(text , row=None , column=None):
                 "column" : column,
                 "value": ent.text,
                 "entity": ent.label_,
-                "source" : "ner"
+                "source" : "ner",
+                "start": ent.start_char,
+                "end": ent.end_char
             })
-    return entities
+    
+    unique_entities = {}
+
+    for entity in entities:
+        key = (entity["start"], entity["end"])
+
+        if key not in unique_entities:
+            unique_entities[key] = entity
+
+    return list(unique_entities.values())

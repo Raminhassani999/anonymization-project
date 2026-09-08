@@ -26,12 +26,16 @@ def anonymize_text(text, detections):
     anonymized_text = text
 
     replacements = {
-        "person": "[PERSON]",
-        "organization": "[ORGANIZATION]",
-        "location": "[LOCATION]",
-        "date": "[DATE]",
-        "misc": "[MISC]"
-    }
+    "person": "[PERSON]",
+    "per": "[PERSON]",
+    "organization": "[ORGANIZATION]",
+    "org": "[ORGANIZATION]",
+    "location": "[LOCATION]",
+    "loc": "[LOCATION]",
+    "gpe": "[LOCATION]",
+    "date": "[DATE]",
+    "misc": "[MISC]"
+}
 
     for detection in detections:
 

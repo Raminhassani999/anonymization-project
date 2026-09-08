@@ -1,5 +1,8 @@
-from normalization.universal_loader import load_any_file
 from detection.detection_engine import detect_all
+from detection.spacy_detector import SpacyDetector
+from detection.hf_detector import detect_hf
+from detection.gliner_detector import detect_gliner
+from normalization.universal_loader import load_any_file
 from anonymization.rule_based_anonymizer import anonymize_dataframe
 from anonymization.text_anonymizer import anonymize_text
 
@@ -90,3 +93,26 @@ if __name__ == "__main__":
             ]
         ].head()
     )
+        
+        
+    test_text = "Anna Rossi lives in Rome."
+
+    if DETECTOR == "spacy":
+        ner_results = SpacyDetector().detect(test_text)
+
+    elif DETECTOR == "huggingface":
+        ner_results = detect_hf(test_text)
+
+    elif DETECTOR == "gliner":
+        ner_results = detect_gliner(test_text)
+
+    print("\nDetected PII:")
+    print(ner_results)
+
+    anonymized_text = anonymize_text(
+        test_text,
+        ner_results
+    )
+
+    print("\nAnonymized text:")
+    print(anonymized_text)
